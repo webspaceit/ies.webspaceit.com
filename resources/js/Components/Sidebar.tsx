@@ -57,6 +57,7 @@ const defaultMenuItems: MenuItem[] = [
         icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z',
         children: [
             { label: 'Branding', href: '/settings/branding', routeName: 'settings.branding' },
+            { label: 'Users', href: '/users', routeName: 'users.index' },
         ],
     },
 ];
@@ -117,9 +118,13 @@ interface DragInfo {
 
 export default function Sidebar() {
     const { url } = usePage();
-    const user = usePage().props.auth.user;
+    const user = usePage().props.auth.user as { role?: string; name: string; email: string };
     const settings = (usePage().props as any).settings;
-    const [menuItems, setMenuItems] = useState<MenuItem[]>(() => loadMenuOrder() || defaultMenuItems);
+    const isAdmin = user.role === 'admin';
+    const [menuItems, setMenuItems] = useState<MenuItem[]>(() => {
+        const items = loadMenuOrder() || defaultMenuItems;
+        return isAdmin ? items : items.filter((item) => item.label !== 'Settings');
+    });
     const [openMenus, setOpenMenus] = useState<Record<string, boolean>>(() => {
         const saved = loadOpenMenus();
         if (saved) return saved;

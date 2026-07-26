@@ -9,6 +9,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\UserManagementController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -36,6 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/export-pdf', [ReportController::class, 'exportPdf'])->name('reports.export-pdf');
+
+    Route::resource('users', UserManagementController::class)->only(['index', 'store', 'update', 'destroy']);
 
     Route::get('/settings/branding', [SettingController::class, 'branding'])->name('settings.branding');
     Route::put('/settings/letterhead', [SettingController::class, 'updateLetterhead'])->name('settings.letterhead.update');
