@@ -20,7 +20,7 @@ interface Props {
 
 export default function IncomeHeadings({ headings, categories }: Props) {
     const { auth } = usePage().props as { auth: { user: { role: string } } };
-    const isAdmin = auth.user.role === 'admin';
+    const isAdmin = auth.user.role === 'admin' || auth.user.role === 'super_admin';
     const [editing, setEditing] = useState<number | null>(null);
     const [showForm, setShowForm] = useState(false);
     const { data, setData, post, processing, errors, reset } = useForm({

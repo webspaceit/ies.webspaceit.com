@@ -12,6 +12,8 @@ class UserManagementController extends Controller
 {
     public function index()
     {
+        abort_unless(auth()->user()->isSuperAdmin(), 403);
+
         $users = User::select('id', 'name', 'email', 'role', 'created_at')->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Users/Index', ['users' => $users]);
@@ -19,7 +21,7 @@ class UserManagementController extends Controller
 
     public function store(Request $request)
     {
-        abort_unless(auth()->user()->isAdmin(), 403);
+        abort_unless(auth()->user()->isSuperAdmin(), 403);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -37,7 +39,7 @@ class UserManagementController extends Controller
 
     public function update(Request $request, User $user)
     {
-        abort_unless(auth()->user()->isAdmin(), 403);
+        abort_unless(auth()->user()->isSuperAdmin(), 403);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -59,7 +61,7 @@ class UserManagementController extends Controller
 
     public function updateRole(Request $request, User $user)
     {
-        abort_unless(auth()->user()->isAdmin(), 403);
+        abort_unless(auth()->user()->isSuperAdmin(), 403);
 
         if ($user->id === auth()->id()) {
             return back()->withErrors(['error' => 'You cannot change your own role.']);
@@ -76,7 +78,7 @@ class UserManagementController extends Controller
 
     public function destroy(User $user)
     {
-        abort_unless(auth()->user()->isAdmin(), 403);
+        abort_unless(auth()->user()->isSuperAdmin(), 403);
 
         if ($user->id === auth()->id()) {
             return back()->withErrors(['error' => 'You cannot delete your own account.']);

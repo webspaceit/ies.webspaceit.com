@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm, router } from '@inertiajs/react';
+import { Head, useForm, router, usePage } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { useState } from 'react';
 
@@ -7,11 +7,13 @@ interface User {
     id: number;
     name: string;
     email: string;
-    role: 'admin' | 'accountant';
+    role: 'super_admin' | 'admin' | 'accountant';
     created_at: string;
 }
 
 export default function Users({ users }: { users: User[] }) {
+    const { auth } = usePage().props as { auth: { user: { role: string } } };
+    const isSuperAdmin = auth.user.role === 'super_admin';
     const [editing, setEditing] = useState<number | null>(null);
     const [showForm, setShowForm] = useState(false);
 
@@ -43,7 +45,7 @@ export default function Users({ users }: { users: User[] }) {
 
     const handleEdit = (user: User) => {
         setEditing(user.id);
-        editData.setData({ name: user.name, email: user.email, password: '', password_confirmation: '', role: user.role });
+        editData.setData({ name: user.name, email: user.email, password: '', password_confirmation: '', role: user.role === 'super_admin' ? 'admin' : user.role });
     };
 
     const handleUpdate = (e: React.FormEvent, id: number) => {
@@ -60,9 +62,14 @@ export default function Users({ users }: { users: User[] }) {
     };
 
     const getRoleBadge = (role: string) => {
-        return role === 'admin'
-            ? <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-700">Admin</span>
-            : <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700">Accountant</span>;
+        switch (role) {
+            case 'super_admin':
+                return <span className="rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-700">Super Admin</span>;
+            case 'admin':
+                return <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-700">Admin</span>;
+            default:
+                return <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700">Accountant</span>;
+        }
     };
 
     return (
@@ -134,7 +141,7 @@ export default function Users({ users }: { users: User[] }) {
                             <div className="overflow-x-auto">
                                 <table className="w-full text-sm">
                                     <thead>
-                                        <tr className="border-b">
+                                        <tr className="border-b bg-[#007C47] text-white">
                                             <th className="px-4 py-3 text-left">#</th>
                                             <th className="px-4 py-3 text-left">Name</th>
                                             <th className="px-4 py-3 text-left">Email</th>
@@ -164,7 +171,7 @@ export default function Users({ users }: { users: User[] }) {
                                                     )}
                                                 </td>
                                                 <td className="px-4 py-3 text-center">
-                                                    {editing === user.id ? (
+                                                    {editing === user.id && user.role !== 'super_admin' ? (
                                                         <select value={editData.data.role} onChange={(e) => editData.setData('role', e.target.value as 'admin' | 'accountant')} className="rounded border-gray-300 text-sm shadow-sm">
                                                             <option value="accountant">Accountant</option>
                                                             <option value="admin">Admin</option>
@@ -184,8 +191,12 @@ export default function Users({ users }: { users: User[] }) {
                                                         </div>
                                                     ) : (
                                                         <div className="flex justify-end gap-2">
-                                                            <button onClick={() => handleEdit(user)} className="rounded bg-blue-100 px-3 py-1 text-xs text-blue-700 hover:bg-blue-200">Edit</button>
-                                                            <button onClick={() => handleDelete(user.id)} className="rounded bg-red-100 px-3 py-1 text-xs text-red-700 hover:bg-red-200">Delete</button>
+                                                            {user.role !== 'super_admin' && (
+                                                                <>
+                                                                    <button onClick={() => handleEdit(user)} className="rounded bg-blue-100 px-3 py-1 text-xs text-blue-700 hover:bg-blue-200">Edit</button>
+                                                                    <button onClick={() => handleDelete(user.id)} className="rounded bg-red-100 px-3 py-1 text-xs text-red-700 hover:bg-red-200">Delete</button>
+                                                                </>
+                                                            )}
                                                         </div>
                                                     )}
                                                 </td>

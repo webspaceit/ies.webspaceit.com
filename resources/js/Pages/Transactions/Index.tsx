@@ -56,7 +56,7 @@ function formatDate(dateStr: string): string {
 
 export default function Transactions({ transactions, filters, incomeHeadings = [], expenseHeadings = [], projects = [] }: Props) {
     const { auth } = usePage().props as { auth: { user: { role: string } } };
-    const isAdmin = auth.user.role === 'admin';
+    const isAdmin = auth.user.role === 'admin' || auth.user.role === 'super_admin';
     const [showForm, setShowForm] = useState(false);
     const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
     const [previewAttachment, setPreviewAttachment] = useState<Attachment | null>(null);

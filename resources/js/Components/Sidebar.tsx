@@ -120,10 +120,20 @@ export default function Sidebar() {
     const { url } = usePage();
     const user = usePage().props.auth.user as { role?: string; name: string; email: string };
     const settings = (usePage().props as any).settings;
-    const isAdmin = user.role === 'admin';
+    const isSuperAdmin = user.role === 'super_admin';
+    const isAdmin = user.role === 'admin' || user.role === 'super_admin';
     const [menuItems, setMenuItems] = useState<MenuItem[]>(() => {
         const items = loadMenuOrder() || defaultMenuItems;
-        return isAdmin ? items : items.filter((item) => item.label !== 'Settings');
+        if (isSuperAdmin) return items;
+        if (isAdmin) {
+            return items.map((item) => {
+                if (item.label === 'Settings' && item.children) {
+                    return { ...item, children: item.children.filter((child) => child.label !== 'Users') };
+                }
+                return item;
+            });
+        }
+        return items.filter((item) => item.label !== 'Settings');
     });
     const [openMenus, setOpenMenus] = useState<Record<string, boolean>>(() => {
         const saved = loadOpenMenus();

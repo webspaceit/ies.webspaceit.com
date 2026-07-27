@@ -31,7 +31,7 @@ interface User {
     id: number;
     name: string;
     email: string;
-    role: 'admin' | 'accountant';
+    role: 'super_admin' | 'admin' | 'accountant';
     created_at: string;
 }
 

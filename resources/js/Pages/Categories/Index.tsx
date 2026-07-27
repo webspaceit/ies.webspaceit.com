@@ -14,7 +14,7 @@ interface Category {
 export default function Categories({ categories }: { categories: Category[] }) {
     const { url } = usePage();
     const { auth } = usePage().props as { auth: { user: { role: string } } };
-    const isAdmin = auth.user.role === 'admin';
+    const isAdmin = auth.user.role === 'admin' || auth.user.role === 'super_admin';
     const urlParams = new URLSearchParams(url.split('?')[1] || '');
     const filterType = urlParams.get('type') as 'income' | 'expense' | null;
 

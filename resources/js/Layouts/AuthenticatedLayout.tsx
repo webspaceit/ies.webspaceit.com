@@ -47,7 +47,7 @@ export default function Authenticated({
                                                 {user.name.charAt(0).toUpperCase()}
                                             </span>
                                             {user.name}
-                                            <span className="rounded-full bg-primary-50 px-2 py-0.5 text-xs font-medium text-primary-700 capitalize">{(user as any).role}</span>
+                                            <span className="rounded-full bg-primary-50 px-2 py-0.5 text-xs font-medium text-primary-700">{(user as any).role === 'super_admin' ? 'Super Admin' : (user as any).role === 'admin' ? 'Admin' : 'Accountant'}</span>
                                             <svg
                                                 className="-me-0.5 ms-1 h-4 w-4"
                                                 xmlns="http://www.w3.org/2000/svg"
