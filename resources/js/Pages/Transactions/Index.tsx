@@ -40,7 +40,7 @@ interface Project { id: number; name: string }
 
 interface Props {
     transactions: PaginatedData;
-    filters: { type?: string; per_page?: string };
+    filters: { type?: string; per_page?: string; search?: string };
     incomeHeadings?: Heading[];
     expenseHeadings?: Heading[];
     projects?: Project[];
