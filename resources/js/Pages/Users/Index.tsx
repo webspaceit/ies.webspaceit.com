@@ -12,7 +12,7 @@ interface User {
 }
 
 export default function Users({ users }: { users: User[] }) {
-    const { auth } = usePage().props as { auth: { user: { role: string } } };
+    const { auth } = usePage().props as unknown as { auth: { user: { role: string } } };
     const isSuperAdmin = auth.user.role === 'super_admin';
     const [editing, setEditing] = useState<number | null>(null);
     const [showForm, setShowForm] = useState(false);

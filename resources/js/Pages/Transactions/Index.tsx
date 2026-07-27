@@ -35,7 +35,7 @@ interface PaginatedData {
     links: { url: string | null; label: string; active: boolean }[];
 }
 
-interface Heading { id: number; name: string; category?: string | null }
+interface Heading { id: number; name: string; category?: { name: string } | string | null }
 interface Project { id: number; name: string }
 
 interface Props {
@@ -55,7 +55,7 @@ function formatDate(dateStr: string): string {
 }
 
 export default function Transactions({ transactions, filters, incomeHeadings = [], expenseHeadings = [], projects = [] }: Props) {
-    const { auth } = usePage().props as { auth: { user: { role: string } } };
+    const { auth } = usePage().props as unknown as { auth: { user: { role: string } } };
     const isAdmin = auth.user.role === 'admin' || auth.user.role === 'super_admin';
     const [showForm, setShowForm] = useState(false);
     const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
@@ -264,7 +264,7 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
                                                 <option value="">Select...</option>
                                                 {Array.from(
                                                     incomeHeadings.reduce((map, h) => {
-                                                        const cat = h.category?.name || 'Other';
+                                                        const cat = typeof h.category === 'object' ? h.category?.name || 'Other' : h.category || 'Other';
                                                         if (!map.has(cat)) map.set(cat, []);
                                                         map.get(cat)!.push(h);
                                                         return map;
@@ -291,7 +291,7 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
                                                 <option value="">Select...</option>
                                                 {Array.from(
                                                     expenseHeadings.reduce((map, h) => {
-                                                        const cat = h.category?.name || 'Other';
+                                                        const cat = typeof h.category === 'object' ? h.category?.name || 'Other' : h.category || 'Other';
                                                         if (!map.has(cat)) map.set(cat, []);
                                                         map.get(cat)!.push(h);
                                                         return map;

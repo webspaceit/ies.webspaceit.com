@@ -1,7 +1,7 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 
 export default function Welcome() {
-    const { auth, name } = usePage().props as { auth: { user: unknown }; name: string };
+    const { auth, name } = usePage().props as unknown as { auth: { user: unknown }; name: string };
 
     if (auth.user) {
         return (
