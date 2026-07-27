@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/export-pdf', [ReportController::class, 'exportPdf'])->name('reports.export-pdf');
 
     Route::resource('users', UserManagementController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::patch('/users/{user}/role', [UserManagementController::class, 'updateRole'])->name('users.role.update');
 
     Route::get('/settings/branding', [SettingController::class, 'branding'])->name('settings.branding');
     Route::put('/settings/letterhead', [SettingController::class, 'updateLetterhead'])->name('settings.letterhead.update');

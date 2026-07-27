@@ -57,6 +57,23 @@ class UserManagementController extends Controller
         return redirect()->route('users.index');
     }
 
+    public function updateRole(Request $request, User $user)
+    {
+        abort_unless(auth()->user()->isAdmin(), 403);
+
+        if ($user->id === auth()->id()) {
+            return back()->withErrors(['error' => 'You cannot change your own role.']);
+        }
+
+        $validated = $request->validate([
+            'role' => 'required|in:admin,accountant',
+        ]);
+
+        $user->update($validated);
+
+        return back()->with('success', 'User role updated successfully.');
+    }
+
     public function destroy(User $user)
     {
         abort_unless(auth()->user()->isAdmin(), 403);

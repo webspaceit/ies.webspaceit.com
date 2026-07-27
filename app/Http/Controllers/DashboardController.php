@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -93,6 +94,13 @@ class DashboardController extends Controller
             ->where('categories.name', 'Technology & Software')
             ->sum('transactions.amount');
 
+        $users = null;
+        if (auth()->user()->isAdmin()) {
+            $users = User::select('id', 'name', 'email', 'role', 'created_at')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
         return Inertia::render('Dashboard', [
             'totalIncome' => (float) $totalIncome,
             'totalExpenses' => (float) $totalExpenses,
@@ -106,6 +114,7 @@ class DashboardController extends Controller
             'monthlyUtility' => (float) $monthlyUtility,
             'monthlyOffice' => (float) $monthlyOffice,
             'monthlyTech' => (float) $monthlyTech,
+            'users' => $users,
         ]);
     }
 }
