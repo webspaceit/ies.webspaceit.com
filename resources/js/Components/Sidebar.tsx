@@ -62,24 +62,26 @@ const defaultMenuItems: MenuItem[] = [
     },
 ];
 
-const STORAGE_KEY = 'sidebar-menu-order';
 const OPEN_MENUS_KEY = 'sidebar-open-menus';
 
-function loadMenuOrder(): MenuItem[] | null {
+function applyMenuOrder(order: Record<string, string[]>): MenuItem[] {
+    return defaultMenuItems.map((item) => {
+        if (item.children && order[item.label]) {
+            const childOrder = order[item.label];
+            const sorted = [...item.children].sort(
+                (a, b) => childOrder.indexOf(a.routeName) - childOrder.indexOf(b.routeName)
+            );
+            return { ...item, children: sorted };
+        }
+        return item;
+    });
+}
+
+function loadMenuOrderFromServer(serverMenuOrder: string | null): MenuItem[] | null {
+    if (!serverMenuOrder) return null;
     try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (!saved) return null;
-        const order = JSON.parse(saved) as Record<string, string[]>;
-        return defaultMenuItems.map((item) => {
-            if (item.children && order[item.label]) {
-                const childOrder = order[item.label];
-                const sorted = [...item.children].sort(
-                    (a, b) => childOrder.indexOf(a.routeName) - childOrder.indexOf(b.routeName)
-                );
-                return { ...item, children: sorted };
-            }
-            return item;
-        });
+        const order = JSON.parse(serverMenuOrder) as Record<string, string[]>;
+        return applyMenuOrder(order);
     } catch {
         return null;
     }
@@ -92,7 +94,20 @@ function saveMenuOrder(items: MenuItem[]) {
             order[item.label] = item.children.map((c) => c.routeName);
         }
     });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(order));
+
+    const metaTag = document.querySelector('meta[name="csrf-token"]');
+    const csrfToken = metaTag?.getAttribute('content') || '';
+
+    fetch('/settings/menu-order', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({ menu_order: JSON.stringify(order) }),
+    }).catch(() => {});
 }
 
 function loadOpenMenus(): Record<string, boolean> | null {
@@ -123,7 +138,7 @@ export default function Sidebar() {
     const isSuperAdmin = user.role === 'super_admin';
     const isAdmin = user.role === 'admin' || user.role === 'super_admin';
     const [menuItems, setMenuItems] = useState<MenuItem[]>(() => {
-        const items = loadMenuOrder() || defaultMenuItems;
+        const items = loadMenuOrderFromServer(settings?.menu_order) || defaultMenuItems;
         if (isSuperAdmin) return items;
         if (isAdmin) {
             return items.map((item) => {
@@ -139,7 +154,7 @@ export default function Sidebar() {
         const saved = loadOpenMenus();
         if (saved) return saved;
         const initial: Record<string, boolean> = {};
-        const items = loadMenuOrder() || defaultMenuItems;
+        const items = loadMenuOrderFromServer(settings?.menu_order) || defaultMenuItems;
         items.forEach((item) => {
             if (item.children) {
                 const isActive = item.children.some((child) => url.startsWith(child.href));
@@ -322,19 +337,21 @@ export default function Sidebar() {
                                                         isActive(child.href) && !isDragging ? 'bg-white/20' : 'hover:bg-white/10'
                                                     }`}
                                                 >
-                                                    <div
-                                                        onMouseDown={(e) => handleMouseDown(e, child.routeName, item.label)}
-                                                        className="flex shrink-0 items-center justify-center w-5 h-8 cursor-grab active:cursor-grabbing"
-                                                    >
-                                                        <svg
-                                                            className="h-3 w-3 opacity-0 group-hover:opacity-60 transition-opacity text-white/50"
-                                                            fill="none"
-                                                            viewBox="0 0 24 24"
-                                                            stroke="currentColor"
+                                                    {isSuperAdmin && (
+                                                        <div
+                                                            onMouseDown={(e) => handleMouseDown(e, child.routeName, item.label)}
+                                                            className="flex shrink-0 items-center justify-center w-5 h-8 cursor-grab active:cursor-grabbing"
                                                         >
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
-                                                        </svg>
-                                                    </div>
+                                                            <svg
+                                                                className="h-3 w-3 opacity-0 group-hover:opacity-60 transition-opacity text-white/50"
+                                                                fill="none"
+                                                                viewBox="0 0 24 24"
+                                                                stroke="currentColor"
+                                                            >
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+                                                            </svg>
+                                                        </div>
+                                                    )}
                                                     <Link
                                                         href={child.href}
                                                         className={`flex-1 rounded-r-lg px-2 py-2 text-sm transition-colors ${

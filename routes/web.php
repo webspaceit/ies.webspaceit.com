@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/users/{user}/role', [UserManagementController::class, 'updateRole'])->name('users.role.update');
 
     Route::get('/settings/branding', [SettingController::class, 'branding'])->name('settings.branding');
+    Route::put('/settings/menu-order', [SettingController::class, 'updateMenuOrder'])->name('settings.menu-order.update');
     Route::put('/settings/letterhead', [SettingController::class, 'updateLetterhead'])->name('settings.letterhead.update');
     Route::put('/settings/logo', [SettingController::class, 'updateLogo'])->name('settings.logo.update');
     Route::delete('/settings/logo', [SettingController::class, 'destroyLogo'])->name('settings.logo.destroy');

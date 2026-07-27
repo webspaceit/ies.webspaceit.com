@@ -116,4 +116,17 @@ class SettingController extends Controller
 
         return redirect()->route('settings.branding');
     }
+
+    public function updateMenuOrder(Request $request)
+    {
+        abort_unless(auth()->user()->isSuperAdmin(), 403);
+
+        $data = $request->validate([
+            'menu_order' => 'required|json',
+        ]);
+
+        Setting::setValue('menu_order', $data['menu_order']);
+
+        return response()->json(['success' => true]);
+    }
 }
