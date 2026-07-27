@@ -60,6 +60,7 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
     const [showForm, setShowForm] = useState(false);
     const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
     const [previewAttachment, setPreviewAttachment] = useState<Attachment | null>(null);
+    const [search, setSearch] = useState('');
     const { data, setData, post, put, processing, errors, reset } = useForm({
         type: 'income',
         income_heading_id: '',
@@ -150,6 +151,20 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
         router.get(route('transactions.index'), params, { preserveState: true });
     };
 
+    const filteredTransactions = search
+        ? transactions.data.filter((tx) => {
+            const q = search.toLowerCase();
+            return (
+                tx.description?.toLowerCase().includes(q) ||
+                tx.income_heading?.name?.toLowerCase().includes(q) ||
+                tx.expense_heading?.name?.toLowerCase().includes(q) ||
+                tx.project?.name?.toLowerCase().includes(q) ||
+                tx.remarks?.toLowerCase().includes(q) ||
+                tx.amount.toString().includes(q)
+            );
+        })
+        : transactions.data;
+
     return (
         <AuthenticatedLayout
             header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Transactions</h2>}
@@ -184,6 +199,15 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
                                     >
                                         Expense
                                     </button>
+                                </div>
+                                <div className="flex-1 flex justify-center">
+                                    <input
+                                        type="text"
+                                        placeholder="Search transactions..."
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        className="w-full max-w-md rounded-lg border-gray-300 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                                    />
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <select
@@ -422,8 +446,8 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
                             <div className="overflow-x-auto">
                                 <table className="w-full text-sm">
                                     <thead>
-                                        <tr className="border-b">
-                                            <th className="px-4 py-3 text-left">Sl No.</th>
+                                        <tr className="border-b bg-[#007C47] text-white">
+                                            <th className="px-4 py-3 text-left">Sl.</th>
                                             <th className="px-4 py-3 text-left">Date</th>
                                             <th className="px-4 py-3 text-left">Type</th>
                                             <th className="px-4 py-3 text-left">Category</th>
@@ -434,7 +458,7 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {transactions.data.map((tx, index) => (
+                                        {filteredTransactions.map((tx, index) => (
                                             <tr key={tx.id} className="border-b hover:bg-gray-50">
                                                 <td className="px-4 py-3 text-sm text-gray-500">{(transactions.current_page - 1) * transactions.per_page + index + 1}</td>
                                                 <td className="px-4 py-3">{formatDate(tx.transaction_date)}</td>
@@ -478,7 +502,7 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
                                                 </td>
                                             </tr>
                                         ))}
-                                        {transactions.data.length === 0 && (
+                                        {filteredTransactions.length === 0 && (
                                             <tr><td colSpan={8} className="px-4 py-8 text-center text-gray-500">No transactions found.</td></tr>
                                         )}
                                     </tbody>

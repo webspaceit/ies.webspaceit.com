@@ -7,6 +7,8 @@ interface Props {
     settings: {
         logo_path: string | null;
         favicon_path: string | null;
+        sidebar_title: string;
+        sidebar_subtitle: string;
     };
     letterhead: {
         company_name: string;
@@ -27,6 +29,10 @@ export default function Branding() {
 
     const logoForm = useForm<{ logo: File | null }>({ logo: null });
     const faviconForm = useForm<{ favicon: File | null }>({ favicon: null });
+    const sidebarForm = useForm({
+        sidebar_title: settings.sidebar_title,
+        sidebar_subtitle: settings.sidebar_subtitle,
+    });
     const letterheadForm = useForm({
         company_name: letterhead.company_name,
         header_text: letterhead.header_text,
@@ -85,6 +91,10 @@ export default function Branding() {
 
     const submitLetterhead = () => {
         letterheadForm.put(route('settings.letterhead.update'));
+    };
+
+    const submitSidebar = () => {
+        sidebarForm.put(route('settings.letterhead.update'));
     };
 
     return (
@@ -196,6 +206,48 @@ export default function Branding() {
                                     )}
                                 </div>
                             </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Sidebar Text */}
+                <Card className="border-0 shadow-lg">
+                    <CardHeader className="rounded-t-2xl border-b border-gray-100 bg-gradient-to-r from-primary-50 to-white">
+                        <CardTitle className="text-lg font-bold text-primary-700">Sidebar Branding</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6 space-y-4">
+                        <p className="text-sm text-gray-500">Customize the text displayed next to the logo in the sidebar.</p>
+
+                        <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">Sidebar Title</label>
+                            <input
+                                type="text"
+                                value={sidebarForm.data.sidebar_title}
+                                onChange={(e) => sidebarForm.setData('sidebar_title', e.target.value)}
+                                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                                placeholder="e.g. IES"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="mb-1 block text-sm font-medium text-gray-700">Sidebar Subtitle</label>
+                            <input
+                                type="text"
+                                value={sidebarForm.data.sidebar_subtitle}
+                                onChange={(e) => sidebarForm.setData('sidebar_subtitle', e.target.value)}
+                                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                                placeholder="e.g. Income Expense System"
+                            />
+                        </div>
+
+                        <div className="flex justify-end pt-2">
+                            <button
+                                onClick={submitSidebar}
+                                disabled={sidebarForm.processing}
+                                className="rounded-lg bg-primary-600 px-6 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 disabled:opacity-50"
+                            >
+                                {sidebarForm.processing ? 'Saving...' : 'Save Sidebar'}
+                            </button>
                         </div>
                     </CardContent>
                 </Card>

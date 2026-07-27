@@ -318,7 +318,7 @@
             <table class="data-table" style="margin-top:0px;">
                 <thead>
                     <tr>
-                        <th height="20" style="width: 5%;">Sl No.</th>
+                        <th height="20" style="width: 5%;">Sl.</th>
                         <th height="20" style="width: 11%;">Date</th>
                         <th height="20" style="width: 8%;">Type</th>
                         <th height="20" style="width: 14%;">Heading</th>

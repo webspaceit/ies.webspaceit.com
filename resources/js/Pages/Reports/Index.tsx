@@ -477,7 +477,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                                 <table className="report-table">
                                     <thead>
                                         <tr>
-                                            <th>Sl No.</th>
+                                            <th style={{ textAlign: 'center' }}>Sl.</th>
                                             <th>Date</th>
                                             <th>Type</th>
                                             <th>Heading</th>

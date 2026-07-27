@@ -15,6 +15,8 @@ class SettingController extends Controller
             'settings' => [
                 'logo_path' => Setting::getValue('logo_path'),
                 'favicon_path' => Setting::getValue('favicon_path'),
+                'sidebar_title' => Setting::getValue('sidebar_title', 'IES'),
+                'sidebar_subtitle' => Setting::getValue('sidebar_subtitle', 'Income Expense System'),
             ],
             'letterhead' => [
                 'company_name' => Setting::getValue('letterhead_company_name', config('app.name', 'Income Expense System')),
@@ -36,6 +38,8 @@ class SettingController extends Controller
             'subheader_text' => 'nullable|string|max:500',
             'footer_text' => 'nullable|string|max:500',
             'show_logo' => 'required|in:0,1',
+            'sidebar_title' => 'nullable|string|max:255',
+            'sidebar_subtitle' => 'nullable|string|max:255',
         ]);
 
         Setting::setValue('letterhead_company_name', $data['company_name']);
@@ -43,6 +47,8 @@ class SettingController extends Controller
         Setting::setValue('letterhead_subheader_text', $data['subheader_text']);
         Setting::setValue('letterhead_footer_text', $data['footer_text']);
         Setting::setValue('letterhead_show_logo', $data['show_logo']);
+        Setting::setValue('sidebar_title', $data['sidebar_title']);
+        Setting::setValue('sidebar_subtitle', $data['sidebar_subtitle']);
 
         return redirect()->route('settings.branding')->with('success', 'Letterhead updated successfully.');
     }

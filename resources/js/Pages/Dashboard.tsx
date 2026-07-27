@@ -468,68 +468,6 @@ export default function Dashboard() {
                     </Card>
                 </div>
 
-                {/* Admin: User Role Management */}
-                {users && users.length > 0 && (
-                    <Card className="border-0 shadow-lg">
-                        <CardHeader className="rounded-t-2xl border-b border-gray-100 bg-gradient-to-r from-purple-50 to-white">
-                            <CardTitle className="text-lg font-bold text-purple-700">User Role Management</CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-0">
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-sm">
-                                    <thead>
-                                        <tr className="border-b border-gray-100 bg-gray-50/50">
-                                            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Name</th>
-                                            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Email</th>
-                                            <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500">Role</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {users.map((user) => (
-                                            <tr key={user.id} className="border-b border-gray-50 transition-colors hover:bg-purple-50/30">
-                                                <td className="px-6 py-3 font-medium text-gray-800">
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-100 text-xs font-bold text-purple-700">
-                                                            {user.name.charAt(0).toUpperCase()}
-                                                        </span>
-                                                        {user.name}
-                                                        {user.id === currentUser.id && (
-                                                            <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500">(You)</span>
-                                                        )}
-                                                    </div>
-                                                </td>
-                                                <td className="px-6 py-3 text-gray-600">{user.email}</td>
-                                                <td className="px-6 py-3 text-center">
-                                                    {user.id === currentUser.id ? (
-                                                        <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
-                                                            user.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
-                                                        }`}>
-                                                            {user.role === 'admin' ? 'Admin' : 'Accountant'}
-                                                        </span>
-                                                    ) : (
-                                                        <select
-                                                            value={user.role}
-                                                            onChange={(e) => handleRoleChange(user.id, e.target.value as 'admin' | 'accountant')}
-                                                            className={`rounded-full border-0 px-3 py-1 text-xs font-semibold shadow-sm transition-colors focus:ring-2 focus:ring-purple-500 ${
-                                                                user.role === 'admin'
-                                                                    ? 'bg-purple-100 text-purple-700 hover:bg-purple-200'
-                                                                    : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                                                            }`}
-                                                        >
-                                                            <option value="accountant">Accountant</option>
-                                                            <option value="admin">Admin</option>
-                                                        </select>
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </CardContent>
-                    </Card>
-                )}
-
                 {/* Recent Transactions */}
                 <Card className="border-0 shadow-lg">
                     <CardHeader className="rounded-t-2xl border-b border-gray-100 bg-gradient-to-r from-primary-50 to-white">

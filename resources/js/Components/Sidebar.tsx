@@ -257,8 +257,8 @@ export default function Sidebar() {
                     )}
                 </div>
                 <div>
-                    <span className="text-lg font-bold tracking-wide text-white">IES</span>
-                    <p className="text-[10px] text-white/60 -mt-0.5">Income Expense System</p>
+                    <span className="text-lg font-bold tracking-wide text-white">{settings?.sidebar_title || 'IES'}</span>
+                    <p className="text-[10px] text-white/60 -mt-0.5">{settings?.sidebar_subtitle || 'Income Expense System'}</p>
                 </div>
             </div>
 

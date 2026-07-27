@@ -39,6 +39,8 @@ class HandleInertiaRequests extends Middleware
             'settings' => [
                 'logo_path' => Setting::getValue('logo_path'),
                 'favicon_path' => Setting::getValue('favicon_path'),
+                'sidebar_title' => Setting::getValue('sidebar_title', 'IES'),
+                'sidebar_subtitle' => Setting::getValue('sidebar_subtitle', 'Income Expense System'),
             ],
             'letterhead' => [
                 'company_name' => Setting::getValue('letterhead_company_name', config('app.name', 'Income Expense System')),
