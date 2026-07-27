@@ -1,6 +1,6 @@
 import Dropdown from '@/Components/Dropdown';
 import Sidebar from '@/Components/Sidebar';
-import { Link, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 
 export default function Authenticated({
@@ -8,20 +8,20 @@ export default function Authenticated({
     children,
 }: PropsWithChildren<{ header?: ReactNode }>) {
     const user = usePage().props.auth.user;
-    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <Sidebar />
+            <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
             {/* Main content area */}
-            <div className="pl-64">
+            <div className="lg:pl-64">
                 {/* Top bar */}
-                <nav className="sticky top-0 z-40 border-b border-gray-200 bg-white/80 backdrop-blur-md">
-                    <div className="flex h-16 items-center justify-between px-6">
+                <nav className="sticky top-0 z-30 border-b border-gray-200 bg-white/80 backdrop-blur-md">
+                    <div className="flex h-16 items-center justify-between px-4 sm:px-6">
                         <div className="flex items-center gap-4">
                             <button
-                                onClick={() => setShowingNavigationDropdown(!showingNavigationDropdown)}
+                                onClick={() => setSidebarOpen(!sidebarOpen)}
                                 className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none lg:hidden"
                             >
                                 <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -29,7 +29,7 @@ export default function Authenticated({
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                         strokeWidth="2"
-                                        d={showingNavigationDropdown ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}
+                                        d={sidebarOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}
                                     />
                                 </svg>
                             </button>
@@ -46,8 +46,7 @@ export default function Authenticated({
                                             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary-500 text-xs font-bold text-white">
                                                 {user.name.charAt(0).toUpperCase()}
                                             </span>
-                                            {user.name}
-                                            <span className="rounded-full bg-primary-50 px-2 py-0.5 text-xs font-medium text-primary-700">{(user as any).role === 'super_admin' ? 'Super Admin' : (user as any).role === 'admin' ? 'Admin' : 'Accountant'}</span>
+                                            <span className="hidden sm:inline">{user.name}</span>
                                             <svg
                                                 className="-me-0.5 ms-1 h-4 w-4"
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -72,46 +71,18 @@ export default function Authenticated({
                             </Dropdown>
                         </div>
                     </div>
-
-                    {/* Mobile navigation dropdown */}
-                    {showingNavigationDropdown && (
-                        <div className="border-t border-gray-200 lg:hidden">
-                            <div className="space-y-1 px-4 pb-3 pt-2">
-                                <Link
-                                    href={route('dashboard')}
-                                    className="block rounded-lg px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100"
-                                >
-                                    Dashboard
-                                </Link>
-                                <Link
-                                    href={route('profile.edit')}
-                                    className="block rounded-lg px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100"
-                                >
-                                    Profile
-                                </Link>
-                                <Link
-                                    href={route('logout')}
-                                    method="post"
-                                    as="button"
-                                    className="block w-full rounded-lg px-3 py-2 text-left text-base font-medium text-gray-700 hover:bg-gray-100"
-                                >
-                                    Log Out
-                                </Link>
-                            </div>
-                        </div>
-                    )}
                 </nav>
 
                 {/* Page header */}
                 {header && (
                     <header className="border-b border-gray-200 bg-white">
-                        <div className="w-full px-6 py-4">
+                        <div className="w-full px-4 sm:px-6 py-4">
                             {header}
                         </div>
                     </header>
                 )}
 
-                <main className="p-6">{children}</main>
+                <main className="p-4 sm:p-6">{children}</main>
             </div>
         </div>
     );

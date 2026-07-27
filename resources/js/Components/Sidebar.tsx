@@ -131,7 +131,7 @@ interface DragInfo {
     currentY: number;
 }
 
-export default function Sidebar() {
+export default function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
     const { url } = usePage();
     const user = usePage().props.auth.user as { role?: string; name: string; email: string };
     const settings = (usePage().props as any).settings;
@@ -269,7 +269,21 @@ export default function Sidebar() {
     }, [draggingRoute, overIndex, menuItems, getItemCenter]);
 
     return (
-        <aside className="fixed inset-y-0 left-0 z-50 w-64 flex flex-col" style={{ background: 'linear-gradient(180deg, #007C47 0%, #005c35 50%, #003d23 100%)' }}>
+        <>
+            {/* Mobile backdrop */}
+            {open && (
+                <div
+                    className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+                    onClick={onClose}
+                />
+            )}
+
+            <aside
+                className={`fixed inset-y-0 left-0 z-50 w-64 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+                    open ? 'translate-x-0' : '-translate-x-full'
+                }`}
+                style={{ background: 'linear-gradient(180deg, #007C47 0%, #005c35 50%, #003d23 100%)' }}
+            >
             {/* Logo */}
             <div className="flex h-16 items-center gap-3 border-b border-white/10 px-6">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm overflow-hidden">
@@ -354,6 +368,7 @@ export default function Sidebar() {
                                                     )}
                                                     <Link
                                                         href={child.href}
+                                                        onClick={onClose}
                                                         className={`flex-1 rounded-r-lg px-2 py-2 text-sm transition-colors ${
                                                             isActive(child.href)
                                                                 ? 'text-white font-medium'
@@ -375,6 +390,7 @@ export default function Sidebar() {
                         <Link
                             key={item.routeName}
                             href={item.href!}
+                            onClick={onClose}
                             className={`flex items-center gap-3 rounded-xl px-3 py-2 text-base font-semibold tracking-wide transition-all duration-200 ${
                                 parentActive
                                     ? 'bg-white/20 text-white shadow-lg shadow-black/10'
@@ -403,5 +419,6 @@ export default function Sidebar() {
                 </div>
             </div>
         </aside>
+        </>
     );
 }
