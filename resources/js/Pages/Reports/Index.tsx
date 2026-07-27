@@ -285,15 +285,15 @@ export default function Reports({ transactions, summary, categories, period, dat
                     </div>
 
                     {/* Report Header (visible on print only) */}
-                    <div className="hidden print-only mb-4 text-center border-b-2 border-[#007C47] pb-4">
-                        {letterhead.show_logo === '1' && settings.logo_path && (
-                            <div className="mb-2">
-                                <img src={`/storage/${settings.logo_path}`} alt="Logo" className="h-10 w-auto mx-auto" />
-                            </div>
-                        )}
-                        <h1 className="text-xl font-bold text-[#007C47]">
-                            {letterhead.company_name}
-                        </h1>
+                    <div className="hidden print-only mb-4 border-b-2 border-[#007C47] pb-4 text-center">
+                        <div className="flex items-center justify-center gap-3">
+                            {letterhead.show_logo === '1' && settings.logo_path && (
+                                <img src={`/storage/${settings.logo_path}`} alt="Logo" className="h-10 w-auto" />
+                            )}
+                            <h1 className="text-xl font-bold text-[#007C47]">
+                                {letterhead.company_name}
+                            </h1>
+                        </div>
                         {letterhead.header_text && (
                             <p className="text-sm text-gray-600 mt-1">{letterhead.header_text}</p>
                         )}
@@ -358,7 +358,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                                             <option value="monthly">Monthly</option>
                                             <option value="half_yearly">Half Year</option>
                                             <option value="yearly">Yearly</option>
-                                            <option value="custom">Custom Range</option>
+                                            <option value="custom">Select Date Range</option>
                                         </select>
                                         {selectedPeriod === 'half_yearly' && (
                                             <select
