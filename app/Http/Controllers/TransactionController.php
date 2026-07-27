@@ -21,12 +21,30 @@ class TransactionController extends Controller
             $query->where('type', $request->type);
         }
 
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('description', 'like', "%{$search}%")
+                  ->orWhere('remarks', 'like', "%{$search}%")
+                  ->orWhere('amount', 'like', "%{$search}%")
+                  ->orWhereHas('incomeHeading', function ($iq) use ($search) {
+                      $iq->where('name', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('expenseHeading', function ($eq) use ($search) {
+                      $eq->where('name', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('project', function ($pq) use ($search) {
+                      $pq->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
         $perPage = (int) $request->input('per_page', 15);
         $transactions = $query->latest('transaction_date')->paginate($perPage)->withQueryString();
 
         return Inertia::render('Transactions/Index', [
             'transactions' => $transactions,
-            'filters' => $request->only(['type', 'per_page']),
+            'filters' => $request->only(['type', 'per_page', 'search']),
             'incomeHeadings' => IncomeHeading::with('category')->orderBy('name')->get(['id', 'name', 'category_id']),
             'expenseHeadings' => ExpenseHeading::with('category')->orderBy('name')->get(['id', 'name', 'category_id']),
             'projects' => Project::orderBy('name')->get(['id', 'name']),

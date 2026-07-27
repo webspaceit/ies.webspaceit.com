@@ -1,7 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm, router, Link, usePage } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface Transaction {
     id: number;
@@ -60,7 +60,7 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
     const [showForm, setShowForm] = useState(false);
     const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
     const [previewAttachment, setPreviewAttachment] = useState<Attachment | null>(null);
-    const [search, setSearch] = useState('');
+    const [search, setSearch] = useState(filters.search || '');
     const { data, setData, post, put, processing, errors, reset } = useForm({
         type: 'income',
         income_heading_id: '',
@@ -142,28 +142,30 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
         const params: Record<string, string> = {};
         if (type) params.type = type;
         if (filters.per_page) params.per_page = filters.per_page;
+        if (search) params.search = search;
         router.get(route('transactions.index'), params, { preserveState: true });
     };
 
     const filterByPerPage = (perPage: string) => {
         const params: Record<string, string> = { per_page: perPage };
         if (filters.type) params.type = filters.type;
+        if (search) params.search = search;
         router.get(route('transactions.index'), params, { preserveState: true });
     };
 
-    const filteredTransactions = search
-        ? transactions.data.filter((tx) => {
-            const q = search.toLowerCase();
-            return (
-                tx.description?.toLowerCase().includes(q) ||
-                tx.income_heading?.name?.toLowerCase().includes(q) ||
-                tx.expense_heading?.name?.toLowerCase().includes(q) ||
-                tx.project?.name?.toLowerCase().includes(q) ||
-                tx.remarks?.toLowerCase().includes(q) ||
-                tx.amount.toString().includes(q)
-            );
-        })
-        : transactions.data;
+    const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    useEffect(() => {
+        if (searchTimeout.current) clearTimeout(searchTimeout.current);
+        searchTimeout.current = setTimeout(() => {
+            const params: Record<string, string> = {};
+            if (search) params.search = search;
+            if (filters.type) params.type = filters.type;
+            if (filters.per_page) params.per_page = filters.per_page;
+            router.get(route('transactions.index'), params, { preserveState: true, preserveScroll: true });
+        }, 400);
+        return () => { if (searchTimeout.current) clearTimeout(searchTimeout.current); };
+    }, [search]);
 
     return (
         <AuthenticatedLayout
@@ -458,7 +460,7 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {filteredTransactions.map((tx, index) => (
+                                        {transactions.data.map((tx, index) => (
                                             <tr key={tx.id} className="border-b hover:bg-gray-50">
                                                 <td className="px-4 py-3 text-sm text-gray-500">{(transactions.current_page - 1) * transactions.per_page + index + 1}</td>
                                                 <td className="px-4 py-3">{formatDate(tx.transaction_date)}</td>
@@ -502,7 +504,7 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
                                                 </td>
                                             </tr>
                                         ))}
-                                        {filteredTransactions.length === 0 && (
+                                        {transactions.data.length === 0 && (
                                             <tr><td colSpan={8} className="px-4 py-8 text-center text-gray-500">No transactions found.</td></tr>
                                         )}
                                     </tbody>
