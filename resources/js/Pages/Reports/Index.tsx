@@ -277,7 +277,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                                 if (selectedCategory) {
                                     params.append('category_id', selectedCategory);
                                 }
-                                params.append('per_page', 'all');
+                                params.append('per_page', String(selectedPerPage));
 
                                 window.location.href = route('reports.export-pdf') + '?' + params.toString();
                             }}
