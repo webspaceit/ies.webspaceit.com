@@ -30,6 +30,7 @@
             background-color: #007C47;
             color: #ffffff;
             padding: 16px 20px;
+            text-align: center;
             margin-bottom: 0;
         }
 
