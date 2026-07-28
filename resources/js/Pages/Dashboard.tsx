@@ -490,7 +490,7 @@ export default function Dashboard() {
                                             <th className="hidden md:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Category</th>
                                             <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Description</th>
                                             <th className="hidden lg:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Project</th>
-                                            <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider">Amount(Taka)</th>
+                                            <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider">Amount (Taka)</th>
                                         </tr>
                                     </thead>
                                     <tbody>

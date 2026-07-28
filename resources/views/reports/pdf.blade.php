@@ -323,7 +323,7 @@
                         <th height="20" style="width: 13%;">Category</th>
                         <th height="20" style="width: 22%;">Description</th>
                         <th height="20" style="width: 14%;">Project</th>
-                        <th height="20" style="width: 13%; text-align: center;">Amount(Taka)</th>
+                        <th height="20" style="width: 13%; text-align: center;">Amount (Taka)</th>
                     </tr>
                 </thead>
                 <tbody>

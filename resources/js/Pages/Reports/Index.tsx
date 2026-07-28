@@ -71,6 +71,10 @@ function formatCurrency(amount: number): string {
     return amount.toLocaleString('en-BD', { minimumFractionDigits: 2 }) + ' Taka';
 }
 
+function formatCurrencyPlain(amount: number): string {
+    return amount.toLocaleString('en-BD', { minimumFractionDigits: 2 });
+}
+
 function formatDate(dateStr: string): string {
     return new Date(dateStr).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).replace(/ /g, '-');
 }
@@ -482,7 +486,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                                             <th className="px-4 py-3">Category</th>
                                             <th className="px-4 py-3">Description</th>
                                             <th className="px-4 py-3">Project</th>
-                                            <th className="px-4 py-3" style={{ textAlign: 'center' }}>Amount(Taka)</th>
+                                            <th className="px-4 py-3" style={{ textAlign: 'center' }}>Amount (Taka)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -500,7 +504,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                                                 <td>{tx.description}</td>
                                                 <td className="text-gray-500">{tx.project?.name || '-'}</td>
                                                 <td className={`amount-cell ${tx.type}`} style={{ textAlign: 'right' }}>
-                                                    {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
+                                                    {tx.type === 'income' ? '+' : '-'}{formatCurrencyPlain(tx.amount)}
                                                 </td>
                                             </tr>
                                         ))}

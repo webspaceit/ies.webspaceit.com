@@ -459,7 +459,7 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
                                             <th className="px-4 py-3 text-left">Category</th>
                                             <th className="px-4 py-3 text-left">Description</th>
                                             <th className="px-4 py-3 text-left">Project</th>
-                                            <th className="px-4 py-3 text-right">Amount(Taka)</th>
+                                            <th className="px-4 py-3 text-right">Amount (Taka)</th>
                                             <th className="px-4 py-3" style={{ textAlign: 'right' }}>Actions</th>
                                         </tr>
                                     </thead>
