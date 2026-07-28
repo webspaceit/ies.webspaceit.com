@@ -6,6 +6,7 @@ use App\Models\Transaction;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -42,12 +43,14 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
 
+        $p = DB::getTablePrefix();
+
         $incomeByCategory = Transaction::where('transactions.type', 'income')
             ->whereYear('transaction_date', $year)
             ->join('income_headings', 'transactions.income_heading_id', '=', 'income_headings.id')
             ->join('categories', 'income_headings.category_id', '=', 'categories.id')
-            ->selectRaw('categories.name, SUM(transactions.amount) as total')
-            ->groupBy('categories.name')
+            ->selectRaw("{$p}categories.name, SUM({$p}transactions.amount) as total")
+            ->groupBy("{$p}categories.name")
             ->orderByDesc('total')
             ->get();
 
@@ -55,8 +58,8 @@ class DashboardController extends Controller
             ->whereYear('transaction_date', $year)
             ->join('expense_headings', 'transactions.expense_heading_id', '=', 'expense_headings.id')
             ->join('categories', 'expense_headings.category_id', '=', 'categories.id')
-            ->selectRaw('categories.name, SUM(transactions.amount) as total')
-            ->groupBy('categories.name')
+            ->selectRaw("{$p}categories.name, SUM({$p}transactions.amount) as total")
+            ->groupBy("{$p}categories.name")
             ->orderByDesc('total')
             ->get();
 
