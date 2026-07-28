@@ -84,8 +84,8 @@ class ReportController extends Controller
             return (object) [
                 'transaction_date_formatted' => Carbon::parse($tx->transaction_date)->format('d-M-Y'),
                 'type' => $tx->type,
-                'heading_name' => $tx->income_heading?->name ?? $tx->expense_heading?->name ?? '-',
-                'category_name' => $tx->income_heading?->category?->name ?? $tx->expense_heading?->category?->name ?? '-',
+                'heading_name' => $tx->incomeHeading?->name ?? $tx->expenseHeading?->name ?? '-',
+                'category_name' => $tx->incomeHeading?->getRelation('category')?->name ?? $tx->expenseHeading?->getRelation('category')?->name ?? '-',
                 'description' => $tx->description,
                 'project_name' => $tx->project?->name ?? '-',
                 'amount' => $tx->amount,
@@ -105,15 +105,21 @@ class ReportController extends Controller
             $reportTitle = 'Income & Expense Report';
         }
 
+        $companyName = Setting::getValue('letterhead_company_name', config('app.name', 'Income Expense System'));
+        $shortCompany = preg_replace('/[^a-zA-Z0-9]/', '', substr(explode(' ', trim($companyName))[0], 0, 5)) ?: 'IES';
+        $periodLabel = ($label === $periodText) ? $label : $label . ' | ' . $periodText;
+        $sanitizedPeriod = preg_replace('/[^a-zA-Z0-9\s-]/', '', $periodLabel);
+        $sanitizedPeriod = preg_replace('/\s+/', '_', trim($sanitizedPeriod));
+
         $data = [
-            'companyName' => Setting::getValue('letterhead_company_name', config('app.name', 'Income Expense System')),
+            'companyName' => $companyName,
             'headerText' => Setting::getValue('letterhead_header_text', ''),
 
             'footerText' => Setting::getValue('letterhead_footer_text', 'This is a computer-generated report. No signature is required.'),
             'showLogo' => Setting::getValue('letterhead_show_logo', '1'),
             'logoPath' => Setting::getValue('logo_path'),
             'title' => $reportTitle,
-            'periodLabel' => $label . ' | ' . $periodText,
+            'periodLabel' => $periodLabel,
             'totalIncome' => $totalIncome,
             'totalExpense' => $totalExpense,
             'netBalance' => $netBalance,
@@ -126,8 +132,18 @@ class ReportController extends Controller
 
         $pdf = Pdf::loadView('reports.pdf', $data);
         $pdf->setPaper('A4', 'portrait');
+        $pdf->setOptions([
+            'defaultFont' => 'dejavu sans',
+            'isRemoteEnabled' => false,
+            'isPhpEnabled' => false,
+            'isJavascriptEnabled' => false,
+            'dpi' => '96',
+            'fontHeightRatio' => '0.8',
+        ]);
 
-        return $pdf->download('report-' . now()->format('Y-m-d-H-i-s') . '.pdf');
+        $filename = $shortCompany . '_' . $sanitizedPeriod . '_' . now()->format('d-M-Y_H-i-s') . '.pdf';
+
+        return $pdf->download($filename);
     }
 
     public function index(Request $request)
