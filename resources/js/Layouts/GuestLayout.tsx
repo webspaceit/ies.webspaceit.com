@@ -24,7 +24,7 @@ export default function Guest({ children }: PropsWithChildren) {
                 </Link>
                 {(settings?.sidebar_title || settings?.sidebar_subtitle) && (
                     <div className="mt-3 text-center">
-                        <h1 className="text-xl font-bold" style={{ color: 'var(--sidebar-via)' }}>{settings?.sidebar_title || 'IES'}</h1>
+                        <h1 className="text-xl font-bold" style={{ color: 'white' }}>{settings?.sidebar_title || 'IES'}</h1>
                         <p className="text-sm text-white/80">{settings?.sidebar_subtitle || 'Income Expense System'}</p>
                     </div>
                 )}
