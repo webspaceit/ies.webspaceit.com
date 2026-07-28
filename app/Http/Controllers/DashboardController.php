@@ -50,7 +50,7 @@ class DashboardController extends Controller
             ->join('income_headings', 'transactions.income_heading_id', '=', 'income_headings.id')
             ->join('categories', 'income_headings.category_id', '=', 'categories.id')
             ->selectRaw("{$p}categories.name, SUM({$p}transactions.amount) as total")
-            ->groupBy("{$p}categories.name")
+            ->groupBy('categories.name')
             ->orderByDesc('total')
             ->get();
 
@@ -59,7 +59,7 @@ class DashboardController extends Controller
             ->join('expense_headings', 'transactions.expense_heading_id', '=', 'expense_headings.id')
             ->join('categories', 'expense_headings.category_id', '=', 'categories.id')
             ->selectRaw("{$p}categories.name, SUM({$p}transactions.amount) as total")
-            ->groupBy("{$p}categories.name")
+            ->groupBy('categories.name')
             ->orderByDesc('total')
             ->get();
 
