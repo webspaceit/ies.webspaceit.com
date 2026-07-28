@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/settings/logo', [SettingController::class, 'destroyLogo'])->name('settings.logo.destroy');
     Route::put('/settings/favicon', [SettingController::class, 'updateFavicon'])->name('settings.favicon.update');
     Route::delete('/settings/favicon', [SettingController::class, 'destroyFavicon'])->name('settings.favicon.destroy');
+    Route::put('/settings/color-scheme', [SettingController::class, 'updateColorScheme'])->name('settings.color-scheme.update');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

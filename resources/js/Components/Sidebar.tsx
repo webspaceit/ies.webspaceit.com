@@ -140,14 +140,7 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
     const [menuItems, setMenuItems] = useState<MenuItem[]>(() => {
         const items = loadMenuOrderFromServer(settings?.menu_order) || defaultMenuItems;
         if (isSuperAdmin) return items;
-        if (isAdmin) {
-            return items.map((item) => {
-                if (item.label === 'Settings' && item.children) {
-                    return { ...item, children: item.children.filter((child) => child.label !== 'Users') };
-                }
-                return item;
-            });
-        }
+        if (isAdmin) return items;
         return items.filter((item) => item.label !== 'Settings');
     });
     const [openMenus, setOpenMenus] = useState<Record<string, boolean>>(() => {
@@ -282,7 +275,7 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
                 className={`fixed inset-y-0 left-0 z-50 w-64 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 ${
                     open ? 'translate-x-0' : '-translate-x-full'
                 }`}
-                style={{ background: 'linear-gradient(180deg, #007C47 0%, #005c35 50%, #003d23 100%)' }}
+                style={{ background: `linear-gradient(180deg, var(--sidebar-from) 0%, var(--sidebar-via) 50%, var(--sidebar-to) 100%)` }}
             >
             {/* Logo */}
             <div className="flex h-16 items-center gap-3 border-b border-white/10 px-6">

@@ -21,7 +21,7 @@ class SettingController extends Controller
             'letterhead' => [
                 'company_name' => Setting::getValue('letterhead_company_name', config('app.name', 'Income Expense System')),
                 'header_text' => Setting::getValue('letterhead_header_text', ''),
-                'subheader_text' => Setting::getValue('letterhead_subheader_text', ''),
+
                 'footer_text' => Setting::getValue('letterhead_footer_text', 'This is a computer-generated report. No signature is required.'),
                 'show_logo' => Setting::getValue('letterhead_show_logo', '1'),
             ],
@@ -33,22 +33,34 @@ class SettingController extends Controller
         abort_unless(auth()->user()->isAdmin(), 403);
 
         $data = $request->validate([
-            'company_name' => 'required|string|max:255',
+            'company_name' => 'sometimes|required|string|max:255',
             'header_text' => 'nullable|string|max:500',
-            'subheader_text' => 'nullable|string|max:500',
+
             'footer_text' => 'nullable|string|max:500',
-            'show_logo' => 'required|in:0,1',
+            'show_logo' => 'sometimes|required|in:0,1',
             'sidebar_title' => 'nullable|string|max:255',
             'sidebar_subtitle' => 'nullable|string|max:255',
         ]);
 
-        Setting::setValue('letterhead_company_name', $data['company_name']);
-        Setting::setValue('letterhead_header_text', $data['header_text']);
-        Setting::setValue('letterhead_subheader_text', $data['subheader_text']);
-        Setting::setValue('letterhead_footer_text', $data['footer_text']);
-        Setting::setValue('letterhead_show_logo', $data['show_logo']);
-        Setting::setValue('sidebar_title', $data['sidebar_title']);
-        Setting::setValue('sidebar_subtitle', $data['sidebar_subtitle']);
+        if (isset($data['company_name'])) {
+            Setting::setValue('letterhead_company_name', $data['company_name']);
+        }
+        if (isset($data['header_text'])) {
+            Setting::setValue('letterhead_header_text', $data['header_text']);
+        }
+
+        if (isset($data['footer_text'])) {
+            Setting::setValue('letterhead_footer_text', $data['footer_text']);
+        }
+        if (isset($data['show_logo'])) {
+            Setting::setValue('letterhead_show_logo', $data['show_logo']);
+        }
+        if (array_key_exists('sidebar_title', $data)) {
+            Setting::setValue('sidebar_title', $data['sidebar_title']);
+        }
+        if (array_key_exists('sidebar_subtitle', $data)) {
+            Setting::setValue('sidebar_subtitle', $data['sidebar_subtitle']);
+        }
 
         return redirect()->route('settings.branding')->with('success', 'Letterhead updated successfully.');
     }
@@ -128,5 +140,18 @@ class SettingController extends Controller
         Setting::setValue('menu_order', $data['menu_order']);
 
         return response()->json(['success' => true]);
+    }
+
+    public function updateColorScheme(Request $request)
+    {
+        abort_unless(auth()->user()->isAdmin(), 403);
+
+        $data = $request->validate([
+            'color_scheme' => 'required|string|max:20',
+        ]);
+
+        Setting::setValue('color_scheme', $data['color_scheme']);
+
+        return redirect()->route('settings.branding')->with('success', 'Color scheme updated successfully.');
     }
 }

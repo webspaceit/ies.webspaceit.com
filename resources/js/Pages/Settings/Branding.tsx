@@ -2,6 +2,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { useRef, useState } from 'react';
+import { toast } from 'sonner';
+import ThemeSwitcher from '@/Components/ThemeSwitcher';
 
 interface Props {
     settings: {
@@ -13,7 +15,7 @@ interface Props {
     letterhead: {
         company_name: string;
         header_text: string;
-        subheader_text: string;
+
         footer_text: string;
         show_logo: string;
     };
@@ -36,7 +38,7 @@ export default function Branding() {
     const letterheadForm = useForm({
         company_name: letterhead.company_name,
         header_text: letterhead.header_text,
-        subheader_text: letterhead.subheader_text,
+
         footer_text: letterhead.footer_text,
         show_logo: letterhead.show_logo,
     });
@@ -55,13 +57,17 @@ export default function Branding() {
             onSuccess: () => {
                 setLogoPreview(null);
                 logoForm.reset();
+                toast.success('Logo uploaded successfully.');
             },
         });
     };
 
     const deleteLogo = () => {
         router.delete(route('settings.logo.destroy'), {
-            onSuccess: () => setLogoPreview(null),
+            onSuccess: () => {
+                setLogoPreview(null);
+                toast.success('Logo removed.');
+            },
         });
     };
 
@@ -79,22 +85,30 @@ export default function Branding() {
             onSuccess: () => {
                 setFaviconPreview(null);
                 faviconForm.reset();
+                toast.success('Favicon uploaded successfully.');
             },
         });
     };
 
     const deleteFavicon = () => {
         router.delete(route('settings.favicon.destroy'), {
-            onSuccess: () => setFaviconPreview(null),
+            onSuccess: () => {
+                setFaviconPreview(null);
+                toast.success('Favicon removed.');
+            },
         });
     };
 
     const submitLetterhead = () => {
-        letterheadForm.put(route('settings.letterhead.update'));
+        letterheadForm.put(route('settings.letterhead.update'), {
+            onSuccess: () => toast.success('Letterhead updated successfully.'),
+        });
     };
 
     const submitSidebar = () => {
-        sidebarForm.put(route('settings.letterhead.update'));
+        sidebarForm.put(route('settings.letterhead.update'), {
+            onSuccess: () => toast.success('Sidebar branding updated successfully.'),
+        });
     };
 
     return (
@@ -108,6 +122,9 @@ export default function Branding() {
             <Head title="Branding" />
 
             <div className="max-w-2xl space-y-6">
+                {/* Color Scheme */}
+                <ThemeSwitcher />
+
                 {/* Logo */}
                 <Card className="border-0 shadow-lg">
                     <CardHeader className="rounded-t-2xl border-b border-gray-100 bg-gradient-to-r from-primary-50 to-white">
@@ -279,17 +296,6 @@ export default function Branding() {
                                 onChange={(e) => letterheadForm.setData('header_text', e.target.value)}
                                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500"
                                 placeholder="Additional header line (optional)"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="mb-1 block text-sm font-medium text-gray-700">Sub-Header Text</label>
-                            <input
-                                type="text"
-                                value={letterheadForm.data.subheader_text}
-                                onChange={(e) => letterheadForm.setData('subheader_text', e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500"
-                                placeholder="Address, phone, email (optional)"
                             />
                         </div>
 

@@ -12,9 +12,15 @@ class UserManagementController extends Controller
 {
     public function index()
     {
-        abort_unless(auth()->user()->isSuperAdmin(), 403);
+        abort_unless(auth()->user()->isAdmin(), 403);
 
-        $users = User::select('id', 'name', 'email', 'role', 'created_at')->orderBy('created_at', 'desc')->get();
+        $query = User::select('id', 'name', 'email', 'role', 'created_at');
+
+        if (!auth()->user()->isSuperAdmin()) {
+            $query->where('role', '!=', 'super_admin');
+        }
+
+        $users = $query->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Users/Index', ['users' => $users]);
     }
@@ -39,7 +45,11 @@ class UserManagementController extends Controller
 
     public function update(Request $request, User $user)
     {
-        abort_unless(auth()->user()->isSuperAdmin(), 403);
+        abort_unless(auth()->user()->isAdmin(), 403);
+
+        if ($user->isSuperAdmin() && !auth()->user()->isSuperAdmin()) {
+            abort(403);
+        }
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -47,6 +57,10 @@ class UserManagementController extends Controller
             'password' => ['nullable', 'confirmed', Password::min(8)],
             'role' => 'required|in:admin,accountant',
         ]);
+
+        if (!auth()->user()->isSuperAdmin() && $validated['role'] === 'admin') {
+            abort(403);
+        }
 
         if (!empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
@@ -61,7 +75,11 @@ class UserManagementController extends Controller
 
     public function updateRole(Request $request, User $user)
     {
-        abort_unless(auth()->user()->isSuperAdmin(), 403);
+        abort_unless(auth()->user()->isAdmin(), 403);
+
+        if ($user->isSuperAdmin() && !auth()->user()->isSuperAdmin()) {
+            abort(403);
+        }
 
         if ($user->id === auth()->id()) {
             return back()->withErrors(['error' => 'You cannot change your own role.']);
@@ -71,6 +89,10 @@ class UserManagementController extends Controller
             'role' => 'required|in:admin,accountant',
         ]);
 
+        if (!auth()->user()->isSuperAdmin() && $validated['role'] === 'admin') {
+            abort(403);
+        }
+
         $user->update($validated);
 
         return back()->with('success', 'User role updated successfully.');
@@ -78,7 +100,11 @@ class UserManagementController extends Controller
 
     public function destroy(User $user)
     {
-        abort_unless(auth()->user()->isSuperAdmin(), 403);
+        abort_unless(auth()->user()->isAdmin(), 403);
+
+        if ($user->isSuperAdmin() && !auth()->user()->isSuperAdmin()) {
+            abort(403);
+        }
 
         if ($user->id === auth()->id()) {
             return back()->withErrors(['error' => 'You cannot delete your own account.']);

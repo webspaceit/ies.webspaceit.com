@@ -108,7 +108,7 @@ class ReportController extends Controller
         $data = [
             'companyName' => Setting::getValue('letterhead_company_name', config('app.name', 'Income Expense System')),
             'headerText' => Setting::getValue('letterhead_header_text', ''),
-            'subHeaderText' => Setting::getValue('letterhead_subheader_text', ''),
+
             'footerText' => Setting::getValue('letterhead_footer_text', 'This is a computer-generated report. No signature is required.'),
             'showLogo' => Setting::getValue('letterhead_show_logo', '1'),
             'logoPath' => Setting::getValue('logo_path'),

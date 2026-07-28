@@ -269,9 +269,7 @@
             @endif
             <div class="report-title">{{ $title }}</div>
             <div class="report-period">{{ $periodLabel }}</div>
-            @if($subHeaderText)
-            <div style="font-size: 7pt; opacity: 0.65; margin-top: 3px;">{{ $subHeaderText }}</div>
-            @endif
+
         </div>
         <div class="header-stripe"></div>
 

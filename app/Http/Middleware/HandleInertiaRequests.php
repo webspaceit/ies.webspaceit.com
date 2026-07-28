@@ -42,11 +42,12 @@ class HandleInertiaRequests extends Middleware
                 'sidebar_title' => Setting::getValue('sidebar_title', 'IES'),
                 'sidebar_subtitle' => Setting::getValue('sidebar_subtitle', 'Income Expense System'),
                 'menu_order' => Setting::getValue('menu_order'),
+                'color_scheme' => Setting::getValue('color_scheme', 'green'),
             ],
             'letterhead' => [
                 'company_name' => Setting::getValue('letterhead_company_name', config('app.name', 'Income Expense System')),
                 'header_text' => Setting::getValue('letterhead_header_text', ''),
-                'subheader_text' => Setting::getValue('letterhead_subheader_text', ''),
+
                 'footer_text' => Setting::getValue('letterhead_footer_text', 'This is a computer-generated report. No signature is required.'),
                 'show_logo' => Setting::getValue('letterhead_show_logo', '1'),
             ],

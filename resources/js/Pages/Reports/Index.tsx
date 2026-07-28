@@ -58,7 +58,7 @@ interface Props {
     letterhead: {
         company_name: string;
         header_text: string;
-        subheader_text: string;
+
         footer_text: string;
         show_logo: string;
     };
@@ -137,7 +137,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                     font-size: 0.875rem;
                 }
                 .report-table thead {
-                    background-color: #007C47;
+                    background-color: rgb(var(--color-primary-500));
                 }
                 .report-table thead th {
                     padding: 10px 12px;
@@ -285,12 +285,12 @@ export default function Reports({ transactions, summary, categories, period, dat
                     </div>
 
                     {/* Report Header (visible on print only) */}
-                    <div className="hidden print-only mb-4 border-b-2 border-[#007C47] pb-4 text-center">
+                    <div className="hidden print-only mb-4 border-b-2 border-primary-500 pb-4 text-center">
                         <div className="flex items-center justify-center gap-3">
                             {letterhead.show_logo === '1' && settings.logo_path && (
                                 <img src={`/storage/${settings.logo_path}`} alt="Logo" className="h-10 w-auto" />
                             )}
-                            <h1 className="text-xl font-bold text-[#007C47]">
+                            <h1 className="text-xl font-bold text-primary-500">
                                 {letterhead.company_name}
                             </h1>
                         </div>
@@ -303,9 +303,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                         <p className="text-sm text-gray-600">
                             {summary.label} | {selectedPeriod === 'monthly' ? 'Monthly' : selectedPeriod === 'half_yearly' ? 'Half Yearly' : selectedPeriod === 'yearly' ? 'Yearly' : selectedPeriod === 'custom' ? 'Custom Range' : 'All Time'}
                         </p>
-                        {letterhead.subheader_text && (
-                            <p className="text-xs text-gray-500 mt-1">{letterhead.subheader_text}</p>
-                        )}
+
                     </div>
 
                     {/* Period Selector */}
@@ -476,15 +474,15 @@ export default function Reports({ transactions, summary, categories, period, dat
                             <div className="overflow-x-auto">
                                 <table className="report-table">
                                     <thead>
-                                        <tr>
-                                            <th style={{ textAlign: 'center' }}>Sl.</th>
-                                            <th>Date</th>
-                                            <th>Type</th>
-                                            <th>Heading</th>
-                                            <th>Category</th>
-                                            <th>Description</th>
-                                            <th>Project</th>
-                                            <th style={{ textAlign: 'right' }}>Amount</th>
+                                        <tr className="bg-primary-500 text-white">
+                                            <th className="px-4 py-3 text-center">Sl.</th>
+                                            <th className="px-4 py-3 text-center">Date</th>
+                                            <th className="px-4 py-3 text-center">Type</th>
+                                            <th className="px-4 py-3 text-center">Heading</th>
+                                            <th className="px-4 py-3 text-center">Category</th>
+                                            <th className="px-4 py-3 text-center">Description</th>
+                                            <th className="px-4 py-3 text-center">Project</th>
+                                            <th className="px-4 py-3 text-center">Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -520,7 +518,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                                         <Link
                                             key={i}
                                             href={link.url || '#'}
-                                            className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${link.active ? 'bg-[#007C47] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'} ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
+                                            className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${link.active ? 'bg-primary-500 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100'} ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
                                             preserveState
                                         >
                                             <span dangerouslySetInnerHTML={{ __html: link.label }} />
@@ -532,8 +530,8 @@ export default function Reports({ transactions, summary, categories, period, dat
                     </Card>
 
                     {/* Print Footer (visible on print only) */}
-                    <div className="hidden print-only mt-6 border-t-2 border-[#007C47] pt-3 text-center">
-                        <div className="w-12 h-0.5 bg-[#005c35] mx-auto mb-2"></div>
+                    <div className="hidden print-only mt-6 border-t-2 border-primary-500 pt-3 text-center">
+                        <div className="w-12 h-0.5 bg-primary-700 mx-auto mb-2"></div>
                         <p className="text-xs text-gray-400">Generated on: {new Date().toLocaleString('en-GB')}</p>
                         <p className="text-xs text-gray-500 italic mt-0.5">{letterhead.footer_text}</p>
                     </div>

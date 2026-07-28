@@ -328,11 +328,11 @@ export default function Dashboard() {
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm">
                                 <thead>
-                                    <tr className="border-b border-gray-100 bg-gray-50/50">
-                                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Month</th>
-                                        <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">Income</th>
-                                        <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">Expense</th>
-                                        <th className="hidden sm:table-cell px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">Balance</th>
+                                    <tr className="border-b bg-primary-500 text-white">
+                                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Month</th>
+                                        <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider">Income</th>
+                                        <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider">Expense</th>
+                                        <th className="hidden sm:table-cell px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider">Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -480,13 +480,13 @@ export default function Dashboard() {
                             <div className="overflow-x-auto">
                                 <table className="w-full text-sm">
                                     <thead>
-                                        <tr className="border-b border-gray-100 bg-gray-50/50">
-                                            <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Date</th>
-                                            <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Type</th>
-                                            <th className="hidden md:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Category</th>
-                                            <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Description</th>
-                                            <th className="hidden lg:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Project</th>
-                                            <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">Amount</th>
+                                        <tr className="border-b bg-primary-500 text-white">
+                                            <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Date</th>
+                                            <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Type</th>
+                                            <th className="hidden md:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Category</th>
+                                            <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Description</th>
+                                            <th className="hidden lg:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Project</th>
+                                            <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider">Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
