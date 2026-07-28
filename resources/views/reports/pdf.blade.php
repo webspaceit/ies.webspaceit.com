@@ -257,15 +257,15 @@
     <div class="page-content">
         <!-- Header -->
         <div class="header">
-            <table style="width: 100%; border-collapse: collapse;">
+            <table style="margin: 0 auto; border-collapse: collapse;">
                 <tr>
                     @if($showLogo && $logoPath)
-                    <td style="width: 50px; vertical-align: middle; text-align: left; padding: 0;">
+                    <td style="vertical-align: middle; text-align: center; padding: 0 4px 0 0;">
                         <img src="{{ public_path('storage/' . $logoPath) }}" style="height: 40px; width: auto;" />
                     </td>
                     @endif
-                    <td style="vertical-align: middle; text-align: left; padding: 0;">
-                        <div class="company-name" style="text-align: left;">{{ $companyName }}</div>
+                    <td style="vertical-align: middle; text-align: center; padding: 0;">
+                        <div class="company-name" style="text-align: center;">{{ $companyName }}</div>
                         @if($headerText)
                         <div style="font-size: 9pt; opacity: 0.9; margin-top: 2px;">{!! $headerText !!}</div>
                         @endif
