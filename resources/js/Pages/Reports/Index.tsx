@@ -68,7 +68,7 @@ interface Props {
 }
 
 function formatCurrency(amount: number): string {
-    return amount.toLocaleString('en-BD', { minimumFractionDigits: 2 }) + ' Tk.';
+    return amount.toLocaleString('en-BD', { minimumFractionDigits: 2 }) + ' Taka';
 }
 
 function formatDate(dateStr: string): string {
@@ -184,7 +184,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                     border: 1px solid #fecaca;
                 }
                 .amount-cell {
-                    text-align: center !important;
+                    text-align: right !important;
                     font-weight: 600;
                     font-variant-numeric: tabular-nums;
                 }
@@ -475,14 +475,14 @@ export default function Reports({ transactions, summary, categories, period, dat
                                 <table className="report-table">
                                     <thead>
                                         <tr className="bg-primary-500 text-white">
-                                            <th className="px-4 py-3 text-center">Sl.</th>
-                                            <th className="px-4 py-3 text-center">Date</th>
-                                            <th className="px-4 py-3 text-center">Type</th>
-                                            <th className="px-4 py-3 text-center">Heading</th>
-                                            <th className="px-4 py-3 text-center">Category</th>
-                                            <th className="px-4 py-3 text-center">Description</th>
-                                            <th className="px-4 py-3 text-center">Project</th>
-                                            <th className="px-4 py-3 text-center">Amount</th>
+                                            <th className="px-4 py-3" style={{ textAlign: 'center' }}>Sl.</th>
+                                            <th className="px-4 py-3">Date</th>
+                                            <th className="px-4 py-3">Type</th>
+                                            <th className="px-4 py-3">Heading</th>
+                                            <th className="px-4 py-3">Category</th>
+                                            <th className="px-4 py-3">Description</th>
+                                            <th className="px-4 py-3">Project</th>
+                                            <th className="px-4 py-3" style={{ textAlign: 'center' }}>Amount(Taka)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -499,7 +499,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                                                 <td className="text-gray-500">{tx.income_heading?.category?.name || tx.expense_heading?.category?.name || '-'}</td>
                                                 <td>{tx.description}</td>
                                                 <td className="text-gray-500">{tx.project?.name || '-'}</td>
-                                                <td className={`amount-cell text-center ${tx.type}`}>
+                                                <td className={`amount-cell ${tx.type}`} style={{ textAlign: 'right' }}>
                                                     {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
                                                 </td>
                                             </tr>

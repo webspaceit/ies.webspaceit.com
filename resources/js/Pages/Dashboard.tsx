@@ -52,7 +52,11 @@ interface PageProps {
 }
 
 function formatCurrency(amount: number): string {
-    return amount.toLocaleString('en-BD', { minimumFractionDigits: 2 }) + ' Tk.';
+    return amount.toLocaleString('en-BD', { minimumFractionDigits: 2 }) + ' Taka';
+}
+
+function formatCurrencyPlain(amount: number): string {
+    return amount.toLocaleString('en-BD', { minimumFractionDigits: 2 });
 }
 
 function BrandingCard({ settings }: { settings: { logo_path: string | null; favicon_path: string | null } }) {
@@ -330,9 +334,9 @@ export default function Dashboard() {
                                 <thead>
                                     <tr className="border-b bg-primary-500 text-white">
                                         <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Month</th>
-                                        <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider">Income</th>
-                                        <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider">Expense</th>
-                                        <th className="hidden sm:table-cell px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider">Balance</th>
+                                        <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider">Income (Taka)</th>
+                                        <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider">Expense (Taka)</th>
+                                        <th className="hidden sm:table-cell px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider">Balance (Taka)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -340,13 +344,13 @@ export default function Dashboard() {
                                         <tr key={stat.month} className="border-b border-gray-50 transition-colors hover:bg-primary-50/30">
                                             <td className="px-4 sm:px-6 py-3 font-medium text-gray-800">{stat.month_name}</td>
                                             <td className="px-4 sm:px-6 py-3 text-right font-medium text-primary-600">
-                                                {stat.income > 0 ? formatCurrency(stat.income) : <span className="text-gray-300">-</span>}
+                                                {stat.income > 0 ? formatCurrencyPlain(stat.income) : <span className="text-gray-300">-</span>}
                                             </td>
                                             <td className="px-4 sm:px-6 py-3 text-right font-medium text-red-500">
-                                                {stat.expense > 0 ? formatCurrency(stat.expense) : <span className="text-gray-300">-</span>}
+                                                {stat.expense > 0 ? formatCurrencyPlain(stat.expense) : <span className="text-gray-300">-</span>}
                                             </td>
                                             <td className={`hidden sm:table-cell px-4 sm:px-6 py-3 text-right font-bold ${stat.balance >= 0 ? 'text-primary-600' : 'text-red-600'}`}>
-                                                {stat.income > 0 || stat.expense > 0 ? formatCurrency(stat.balance) : <span className="text-gray-300">-</span>}
+                                                {stat.income > 0 || stat.expense > 0 ? formatCurrencyPlain(stat.balance) : <span className="text-gray-300">-</span>}
                                             </td>
                                         </tr>
                                     ))}
@@ -486,7 +490,7 @@ export default function Dashboard() {
                                             <th className="hidden md:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Category</th>
                                             <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Description</th>
                                             <th className="hidden lg:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Project</th>
-                                            <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider">Amount</th>
+                                            <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider">Amount(Taka)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -504,7 +508,7 @@ export default function Dashboard() {
                                                 <td className="px-4 sm:px-6 py-3 font-medium text-gray-800">{tx.description}</td>
                                                 <td className="hidden lg:table-cell px-4 sm:px-6 py-3 text-gray-500">{tx.project?.name || '-'}</td>
                                                 <td className={`px-4 sm:px-6 py-3 text-right font-bold whitespace-nowrap ${tx.type === 'income' ? 'text-primary-600' : 'text-red-500'}`}>
-                                                    {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
+                                                    {tx.type === 'income' ? '+' : '-'}{formatCurrencyPlain(tx.amount)}
                                                 </td>
                                             </tr>
                                         ))}

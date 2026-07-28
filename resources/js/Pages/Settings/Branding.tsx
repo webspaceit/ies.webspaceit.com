@@ -289,14 +289,15 @@ export default function Branding() {
                         </div>
 
                         <div>
-                            <label className="mb-1 block text-sm font-medium text-gray-700">Header Text</label>
-                            <input
-                                type="text"
+                            <label className="mb-1 block text-sm font-medium text-gray-700">Header Text (HTML supported)</label>
+                            <textarea
                                 value={letterheadForm.data.header_text}
                                 onChange={(e) => letterheadForm.setData('header_text', e.target.value)}
                                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500"
-                                placeholder="e.g. email, phone, address"
+                                placeholder="e.g. email, phone, address — HTML tags supported"
+                                rows={4}
                             />
+                            <p className="mt-1 text-xs text-gray-400">HTML tags like &lt;b&gt;, &lt;br&gt;, &lt;font&gt; etc. are supported.</p>
                         </div>
 
                         <div>

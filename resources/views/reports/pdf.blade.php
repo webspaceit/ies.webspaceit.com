@@ -265,7 +265,7 @@
             @endif
             <div class="company-name">{{ $companyName }}</div>
             @if($headerText)
-            <div style="font-size: 9pt; opacity: 0.9; margin-top: 2px;">{{ $headerText }}</div>
+            <div style="font-size: 9pt; opacity: 0.9; margin-top: 2px;">{!! $headerText !!}</div>
             @endif
             <div class="report-title">{{ $title }}</div>
             <div class="report-period">{{ $periodLabel }}</div>
@@ -280,7 +280,7 @@
                     @if($showIncome)
                     <td class="summary-box income-box" width="33.33%">
                         <div class="summary-label">Total Income</div>
-                        <div class="summary-value">+{{ number_format($totalIncome, 2) }} Tk.</div>
+                        <div class="summary-value">+{{ number_format($totalIncome, 2) }} Taka</div>
                         <div class="summary-sub">{{ $periodLabel }}</div>
                     </td>
                     @endif
@@ -288,7 +288,7 @@
                     @if($showExpense)
                     <td class="summary-box expense-box" width="33.33%">
                         <div class="summary-label">Total Expenses</div>
-                        <div class="summary-value">-{{ number_format($totalExpense, 2) }} Tk.</div>
+                        <div class="summary-value">-{{ number_format($totalExpense, 2) }} Taka</div>
                         <div class="summary-sub">{{ $periodLabel }}</div>
                     </td>
                     @endif
@@ -296,7 +296,7 @@
                     @if($showBalance)
                     <td class="summary-box balance-box" width="33.33%">
                         <div class="summary-label">Net Balance</div>
-                        <div class="summary-value">{{ $netBalance >= 0 ? '+' : '' }}{{ number_format($netBalance, 2) }} Tk.</div>
+                        <div class="summary-value">{{ $netBalance >= 0 ? '+' : '' }}{{ number_format($netBalance, 2) }} Taka</div>
                         <div class="summary-sub">{{ $periodLabel }}</div>
                     </td>
                     @endif
@@ -323,7 +323,7 @@
                         <th height="20" style="width: 13%;">Category</th>
                         <th height="20" style="width: 22%;">Description</th>
                         <th height="20" style="width: 14%;">Project</th>
-                        <th height="20" style="width: 13%; text-align: center;">Amount</th>
+                        <th height="20" style="width: 13%; text-align: center;">Amount(Taka)</th>
                     </tr>
                 </thead>
                 <tbody>
