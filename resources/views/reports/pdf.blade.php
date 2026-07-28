@@ -30,7 +30,6 @@
             background-color: #007C47;
             color: #ffffff;
             padding: 16px 20px;
-            text-align: center;
             margin-bottom: 0;
         }
 
@@ -258,18 +257,23 @@
     <div class="page-content">
         <!-- Header -->
         <div class="header">
-            @if($showLogo && $logoPath)
-            <div style="margin-bottom: 6px;">
-                <img src="{{ public_path('storage/' . $logoPath) }}" style="height: 40px; width: auto;" />
-            </div>
-            @endif
-            <div class="company-name">{{ $companyName }}</div>
-            @if($headerText)
-            <div style="font-size: 9pt; opacity: 0.9; margin-top: 2px;">{!! $headerText !!}</div>
-            @endif
-            <div class="report-title">{{ $title }}</div>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    @if($showLogo && $logoPath)
+                    <td style="width: 50px; vertical-align: middle; text-align: left; padding: 0;">
+                        <img src="{{ public_path('storage/' . $logoPath) }}" style="height: 40px; width: auto;" />
+                    </td>
+                    @endif
+                    <td style="vertical-align: middle; text-align: left; padding: 0;">
+                        <div class="company-name" style="text-align: left;">{{ $companyName }}</div>
+                        @if($headerText)
+                        <div style="font-size: 9pt; opacity: 0.9; margin-top: 2px;">{!! $headerText !!}</div>
+                        @endif
+                    </td>
+                </tr>
+            </table>
+            <div class="report-title" style="margin-top: 8px;">{{ $title }}</div>
             <div class="report-period">{{ $periodLabel }}</div>
-
         </div>
         <div class="header-stripe"></div>
 

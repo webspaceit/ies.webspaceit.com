@@ -135,14 +135,12 @@ class ReportController extends Controller
 
         $pdf = Pdf::loadView('reports.pdf', $data);
         $pdf->setPaper('A4', 'portrait');
-        $pdf->setOptions([
-            'defaultFont' => 'dejavu sans',
-            'isRemoteEnabled' => false,
-            'isPhpEnabled' => false,
-            'isJavascriptEnabled' => false,
-            'dpi' => '96',
-            'fontHeightRatio' => '0.8',
-        ]);
+        $pdf->setOption('defaultFont', 'dejavu sans');
+        $pdf->setOption('isRemoteEnabled', false);
+        $pdf->setOption('isPhpEnabled', false);
+        $pdf->setOption('isJavascriptEnabled', false);
+        $pdf->setOption('dpi', 96);
+        $pdf->setOption('fontHeightRatio', 0.8);
 
         $filename = $shortCompany . '_' . $sanitizedPeriod . '_' . now()->format('d-M-Y_H-i-s') . '.pdf';
 
