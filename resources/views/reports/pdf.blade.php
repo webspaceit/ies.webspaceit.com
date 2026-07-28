@@ -258,21 +258,17 @@
     <div class="page-content">
         <!-- Header -->
         <div class="header">
-            <table style="margin: 0 auto; border-collapse: collapse;">
-                <tr>
-                    @if($showLogo && $logoPath)
-                    <td style="vertical-align: middle; text-align: center; padding: 0 4px 0 0;">
-                        <img src="{{ public_path('storage/' . $logoPath) }}" style="height: 40px; width: auto;" />
-                    </td>
-                    @endif
-                    <td style="vertical-align: middle; text-align: center; padding: 0;">
-                        <div class="company-name" style="text-align: center;">{{ $companyName }}</div>
-                        @if($headerText)
-                        <div style="font-size: 9pt; opacity: 0.9; margin-top: 2px;">{!! $headerText !!}</div>
-                        @endif
-                    </td>
-                </tr>
-            </table>
+            @if($showLogo && $logoPath)
+            <div style="text-align: center; margin-bottom: 6px;">
+                <img src="{{ public_path('storage/' . $logoPath) }}" style="height: 40px; width: auto; vertical-align: middle; margin-right: 6px;" />
+                <span class="company-name" style="vertical-align: middle;">{{ $companyName }}</span>
+            </div>
+            @else
+            <div class="company-name">{{ $companyName }}</div>
+            @endif
+            @if($headerText)
+            <div style="font-size: 9pt; opacity: 0.9; margin-top: 2px;">{!! $headerText !!}</div>
+            @endif
             <div class="report-title" style="margin-top: 8px;">{{ $title }}</div>
             <div class="report-period">{{ $periodLabel }}</div>
         </div>
