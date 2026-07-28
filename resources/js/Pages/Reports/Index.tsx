@@ -184,7 +184,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                     border: 1px solid #fecaca;
                 }
                 .amount-cell {
-                    text-align: right;
+                    text-align: center !important;
                     font-weight: 600;
                     font-variant-numeric: tabular-nums;
                 }
@@ -499,7 +499,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                                                 <td className="text-gray-500">{tx.income_heading?.category?.name || tx.expense_heading?.category?.name || '-'}</td>
                                                 <td>{tx.description}</td>
                                                 <td className="text-gray-500">{tx.project?.name || '-'}</td>
-                                                <td className={`amount-cell ${tx.type}`}>
+                                                <td className={`amount-cell text-center ${tx.type}`}>
                                                     {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
                                                 </td>
                                             </tr>

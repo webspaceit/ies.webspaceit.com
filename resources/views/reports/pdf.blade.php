@@ -209,7 +209,7 @@
         }
 
         .amount {
-            text-align: right;
+            text-align: center !important;
             font-weight: 700;
             font-family: 'Courier New', monospace;
             font-size: 8pt;
@@ -323,7 +323,7 @@
                         <th height="20" style="width: 13%;">Category</th>
                         <th height="20" style="width: 22%;">Description</th>
                         <th height="20" style="width: 14%;">Project</th>
-                        <th height="20" style="width: 13%; text-align: right;">Amount</th>
+                        <th height="20" style="width: 13%; text-align: center;">Amount</th>
                     </tr>
                 </thead>
                 <tbody>
