@@ -295,7 +295,7 @@ export default function Branding() {
                                 value={letterheadForm.data.header_text}
                                 onChange={(e) => letterheadForm.setData('header_text', e.target.value)}
                                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500"
-                                placeholder="Additional header line (optional)"
+                                placeholder="e.g. email, phone, address"
                             />
                         </div>
 
