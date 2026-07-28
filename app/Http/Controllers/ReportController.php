@@ -20,6 +20,7 @@ class ReportController extends Controller
         $endDateParam = $request->input('end_date');
         $type = $request->input('type');
         $categoryId = $request->input('category_id');
+        $perPage = $request->input('per_page');
 
         $label = 'All Time';
         $startDate = null;
@@ -77,7 +78,9 @@ class ReportController extends Controller
         $totalExpense = $query->clone()->where('type', 'expense')->sum('amount');
         $netBalance = $totalIncome - $totalExpense;
 
-        $transactions = $query->latest('transaction_date')->get();
+        $transactions = $perPage && $perPage !== 'all'
+            ? $query->latest('transaction_date')->paginate((int) $perPage)
+            : $query->latest('transaction_date')->get();
 
         $categoryNames = Category::pluck('name', 'id')->toArray();
 
