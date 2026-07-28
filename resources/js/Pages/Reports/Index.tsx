@@ -299,7 +299,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                             </h1>
                         </div>
                         {letterhead.header_text && (
-                            <p className="text-sm text-gray-600 mt-1">{letterhead.header_text}</p>
+                            <p className="text-sm text-gray-600 mt-1" dangerouslySetInnerHTML={{ __html: letterhead.header_text }} />
                         )}
                         <h2 className="text-lg font-semibold mt-1">
                             {selectedType === 'income' ? 'Income' : selectedType === 'expense' ? 'Expense' : 'Income & Expense'} Report
