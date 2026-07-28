@@ -79,13 +79,16 @@ class ReportController extends Controller
 
         $transactions = $query->latest('transaction_date')->get();
 
+        $categoryNames = Category::pluck('name', 'id')->toArray();
+
         // Prepare transactions for PDF
-        $pdfTransactions = $transactions->map(function ($tx) {
+        $pdfTransactions = $transactions->map(function ($tx) use ($categoryNames) {
+            $heading = $tx->incomeHeading ?? $tx->expenseHeading;
             return (object) [
                 'transaction_date_formatted' => Carbon::parse($tx->transaction_date)->format('d-M-Y'),
                 'type' => $tx->type,
-                'heading_name' => $tx->incomeHeading?->name ?? $tx->expenseHeading?->name ?? '-',
-                'category_name' => $tx->incomeHeading?->getRelation('category')?->name ?? $tx->expenseHeading?->getRelation('category')?->name ?? '-',
+                'heading_name' => $heading?->name ?? '-',
+                'category_name' => $heading && isset($categoryNames[$heading->category_id]) ? $categoryNames[$heading->category_id] : '-',
                 'description' => $tx->description,
                 'project_name' => $tx->project?->name ?? '-',
                 'amount' => $tx->amount,
