@@ -480,6 +480,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                                     <thead>
                                         <tr className="bg-primary-500 text-white">
                                             <th className="px-4 py-3" style={{ textAlign: 'center' }}>Sl.</th>
+                                            <th className="px-4 py-3" style={{ textAlign: 'center' }}>Trans. ID</th>
                                             <th className="px-4 py-3">Date</th>
                                             <th className="px-4 py-3">Type</th>
                                             <th className="px-4 py-3">Heading</th>
@@ -493,6 +494,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                                         {transactions.data.map((tx, index) => (
                                             <tr key={tx.id}>
                                                 <td className="text-center text-gray-500 font-medium">{(transactions.current_page - 1) * transactions.per_page + index + 1}</td>
+                                                <td className="text-center text-gray-700 font-medium">{tx.date_code}</td>
                                                 <td className="whitespace-nowrap text-gray-700">{formatDate(tx.transaction_date)}</td>
                                                 <td>
                                                     <span className={`type-badge-prof ${tx.type}`}>
@@ -509,7 +511,7 @@ export default function Reports({ transactions, summary, categories, period, dat
                                             </tr>
                                         ))}
                                         {transactions.data.length === 0 && (
-                                            <tr><td colSpan={8} className="px-4 py-12 text-center text-gray-400 italic">No transactions found.</td></tr>
+                                            <tr><td colSpan={9} className="px-4 py-12 text-center text-gray-400 italic">No transactions found.</td></tr>
                                         )}
                                     </tbody>
                                 </table>

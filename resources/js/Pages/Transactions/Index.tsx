@@ -65,6 +65,7 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
     const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
     const [previewAttachment, setPreviewAttachment] = useState<Attachment | null>(null);
     const [search, setSearch] = useState(filters.search || '');
+    const [selectedTransactions, setSelectedTransactions] = useState<number[]>([]);
     const { data, setData, post, put, processing, errors, reset } = useForm({
         type: 'income',
         income_heading_id: '',
@@ -125,6 +126,39 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
         if (confirm('Are you sure you want to delete this transaction?')) {
             router.delete(route('transactions.destroy', id));
         }
+    };
+
+    const handleBulkDelete = () => {
+        if (selectedTransactions.length === 0) {
+            alert('Please select at least one transaction to delete.');
+            return;
+        }
+
+        if (confirm(`Are you sure you want to delete ${selectedTransactions.length} selected transaction(s)?`)) {
+            router.post(route('transactions.bulk-destroy'), {
+                transaction_ids: selectedTransactions,
+            }, {
+                onSuccess: () => {
+                    setSelectedTransactions([]);
+                },
+            });
+        }
+    };
+
+    const toggleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.checked) {
+            setSelectedTransactions(transactions.data.map(tx => tx.id));
+        } else {
+            setSelectedTransactions([]);
+        }
+    };
+
+    const toggleSelectTransaction = (id: number) => {
+        setSelectedTransactions(prev =>
+            prev.includes(id)
+                ? prev.filter(txId => txId !== id)
+                : [...prev, id]
+        );
     };
 
     const handleDeleteAttachment = (attachmentId: number) => {
@@ -228,17 +262,17 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
                                         <option value="100">100 / page</option>
                                     </select>
                                     <button
-                                    onClick={() => {
-                                        if (showForm) {
-                                            handleCancelEdit();
-                                        } else {
-                                            setShowForm(true);
-                                        }
-                                    }}
-                                    className="rounded bg-primary-500 px-4 py-2 text-sm text-white hover:bg-primary-600"
-                                >
-                                    {showForm ? 'Cancel' : '+ New Transaction'}
-                                </button>
+                                        onClick={() => {
+                                            if (showForm) {
+                                                handleCancelEdit();
+                                            } else {
+                                                setShowForm(true);
+                                            }
+                                        }}
+                                        className="rounded bg-primary-500 px-4 py-2 text-sm text-white hover:bg-primary-600"
+                                    >
+                                        {showForm ? 'Cancel' : '+ New Transaction'}
+                                    </button>
                                 </div>
                             </div>
                         </CardHeader>
@@ -446,14 +480,33 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
                     {/* Table */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>Transaction History ({transactions.total})</CardTitle>
+                            <div className="flex items-center justify-between">
+                                <CardTitle>Transaction History ({transactions.total})</CardTitle>
+                                {selectedTransactions.length > 0 && (
+                                    <button
+                                        onClick={handleBulkDelete}
+                                        className="rounded bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+                                    >
+                                        Delete Selected ({selectedTransactions.length})
+                                    </button>
+                                )}
+                            </div>
                         </CardHeader>
                         <CardContent>
                             <div className="overflow-x-auto">
                                 <table className="w-full text-sm">
                                     <thead>
                                         <tr className="border-b bg-primary-500 text-white">
+                                            <th className="px-4 py-3 text-center">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedTransactions.length === transactions.data.length && transactions.data.length > 0}
+                                                    onChange={toggleSelectAll}
+                                                    className="h-4 w-4 rounded border-gray-300"
+                                                />
+                                            </th>
                                             <th className="px-4 py-3 text-left">Sl.</th>
+                                            <th className="px-4 py-3 text-left">Trans. ID</th>
                                             <th className="px-4 py-3 text-left">Date</th>
                                             <th className="px-4 py-3 text-left">Type</th>
                                             <th className="px-4 py-3 text-left">Category</th>
@@ -466,7 +519,16 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
                                     <tbody>
                                         {transactions.data.map((tx, index) => (
                                             <tr key={tx.id} className="border-b hover:bg-gray-50">
+                                                <td className="px-4 py-3 text-center">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedTransactions.includes(tx.id)}
+                                                        onChange={() => toggleSelectTransaction(tx.id)}
+                                                        className="h-4 w-4 rounded border-gray-300"
+                                                    />
+                                                </td>
                                                 <td className="px-4 py-3 text-sm text-gray-500">{(transactions.current_page - 1) * transactions.per_page + index + 1}</td>
+                                                <td className="px-4 py-3 text-sm font-medium text-gray-700">{tx.date_code}</td>
                                                 <td className="px-4 py-3">{formatDate(tx.transaction_date)}</td>
                                                 <td className="px-4 py-3">
                                                     <span className={`rounded px-2 py-1 text-xs font-medium ${tx.type === 'income' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
@@ -519,7 +581,7 @@ export default function Transactions({ transactions, filters, incomeHeadings = [
                                             </tr>
                                         ))}
                                         {transactions.data.length === 0 && (
-                                            <tr><td colSpan={8} className="px-4 py-8 text-center text-gray-500">No transactions found.</td></tr>
+                                            <tr><td colSpan={10} className="px-4 py-8 text-center text-gray-500">No transactions found.</td></tr>
                                         )}
                                     </tbody>
                                 </table>

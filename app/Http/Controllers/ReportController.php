@@ -88,6 +88,7 @@ class ReportController extends Controller
         $pdfTransactions = $transactions->map(function ($tx) use ($categoryNames) {
             $heading = $tx->incomeHeading ?? $tx->expenseHeading;
             return (object) [
+                'date_code' => $tx->date_code,
                 'transaction_date_formatted' => Carbon::parse($tx->transaction_date)->format('d-M-Y'),
                 'type' => $tx->type,
                 'heading_name' => $heading?->name ?? '-',

@@ -318,19 +318,21 @@
                 <thead>
                     <tr>
                         <th height="20" style="width: 5%;">Sl.</th>
+                        <th height="20" style="width: 10%;">Trans. ID</th>
                         <th height="20" style="width: 11%;">Date</th>
                         <th height="20" style="width: 8%;">Type</th>
                         <th height="20" style="width: 14%;">Heading</th>
                         <th height="20" style="width: 13%;">Category</th>
                         <th height="20" style="width: 22%;">Description</th>
                         <th height="20" style="width: 14%;">Project</th>
-                        <th height="20" style="width: 13%; text-align: center;">Amount (Taka)</th>
+                        <th height="20" style="width: 3%; text-align: center;">Amount (Taka)</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($transactions as $index => $transaction)
                     <tr>
                         <td class="sl-no">{{ $index + 1 }}</td>
+                        <td class="sl-no">{{ $transaction->date_code }}</td>
                         <td class="date">{{ $transaction->transaction_date_formatted }}</td>
                         <td>
                             <span class="type-badge {{ $transaction->type }}">
@@ -347,7 +349,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="no-data">No transactions found for the selected period.</td>
+                        <td colspan="9" class="no-data">No transactions found for the selected period.</td>
                     </tr>
                     @endforelse
                 </tbody>

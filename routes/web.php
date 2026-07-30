@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('expense-headings', ExpenseHeadingController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::resource('transactions', TransactionController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::delete('attachments/{attachment}', [TransactionController::class, 'destroyAttachment'])->name('attachments.destroy');
+    Route::post('transactions/bulk-destroy', [TransactionController::class, 'bulkDestroy'])->name('transactions.bulk-destroy');
     Route::resource('projects', ProjectController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

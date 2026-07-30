@@ -10,7 +10,9 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::withCount('transactions')->latest()->get();
+        $projects = Project::with(['transactions' => function ($query) {
+            $query->latest('transaction_date')->limit(5)->get(['id', 'date_code', 'transaction_date', 'type', 'amount']);
+        }])->withCount('transactions')->latest()->get();
 
         return Inertia::render('Projects/Index', ['projects' => $projects]);
     }

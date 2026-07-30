@@ -69,7 +69,7 @@ class Transaction extends Model
     public static function generateDateCode(string $transactionDate): string
     {
         $date = \Carbon\Carbon::parse($transactionDate);
-        $prefix = 'DC-' . $date->format('dmy') . '-';
+        $prefix = 'TXN-' . $date->format('dmy') . '-';
 
         $lastCode = static::where('date_code', 'like', $prefix . '%')
             ->orderBy('date_code', 'desc')

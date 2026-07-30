@@ -10,6 +10,7 @@ interface Project {
     start_date: string | null;
     end_date: string | null;
     transactions_count: number;
+    transactions?: { id: number; date_code: string; transaction_date: string; type: string; amount: number }[];
 }
 
 function formatDate(dateStr: string | null): string {
@@ -155,6 +156,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
                                         <tr className="border-b bg-primary-500 text-white">
                                             <th className="px-4 py-3 text-left">#</th>
                                             <th className="px-4 py-3 text-left">Name</th>
+                                            <th className="px-4 py-3 text-left">Latest Trans. ID</th>
                                             <th className="px-4 py-3 text-left">Description</th>
                                             <th className="px-4 py-3 text-left">Start Date</th>
                                             <th className="px-4 py-3 text-left">End Date</th>
@@ -176,6 +178,9 @@ export default function Projects({ projects }: { projects: Project[] }) {
                                                     ) : (
                                                         project.name
                                                     )}
+                                                </td>
+                                                <td className="px-4 py-3 text-sm font-medium text-gray-700">
+                                                    {project.transactions && project.transactions.length > 0 ? project.transactions[0].date_code : '-'}
                                                 </td>
                                                 <td className="px-4 py-3 text-gray-500 max-w-[200px]">{editing !== project.id ? (
                                                     <span className="truncate block">{project.description || '-'}</span>
@@ -220,7 +225,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
                                             </tr>
                                         ))}
                                         {projects.length === 0 && (
-                                            <tr><td colSpan={7} className="px-4 py-8 text-center text-gray-500">No projects found.</td></tr>
+                                            <tr><td colSpan={8} className="px-4 py-8 text-center text-gray-500">No projects found.</td></tr>
                                         )}
                                     </tbody>
                                 </table>

@@ -27,6 +27,7 @@ class TransactionController extends Controller
                 $q->where('description', 'like', "%{$search}%")
                   ->orWhere('remarks', 'like', "%{$search}%")
                   ->orWhere('amount', 'like', "%{$search}%")
+                  ->orWhere('date_code', 'like', "%{$search}%")
                   ->orWhereHas('incomeHeading', function ($iq) use ($search) {
                       $iq->where('name', 'like', "%{$search}%");
                   })
@@ -132,6 +133,20 @@ class TransactionController extends Controller
         $transaction->delete();
 
         return redirect()->route('transactions.index');
+    }
+
+    public function bulkDestroy(Request $request)
+    {
+        abort_unless(auth()->user()->isAdmin(), 403);
+        
+        $request->validate([
+            'transaction_ids' => 'required|array',
+            'transaction_ids.*' => 'exists:transactions,id'
+        ]);
+
+        Transaction::whereIn('id', $request->transaction_ids)->delete();
+
+        return redirect()->route('transactions.index')->with('success', 'Selected transactions deleted successfully.');
     }
 
     public function destroyAttachment(Attachment $attachment)
